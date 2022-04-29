@@ -49,6 +49,8 @@
 /Debug/
 /STM32Cube/
 
+!STM32_Firmware_bin/*
+
 # Generated files
 Inc/version.h
 
