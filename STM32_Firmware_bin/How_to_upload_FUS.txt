@@ -1,0 +1,6 @@
+1. Connect MCU throughout STM32CubeProgrammer
+2. Go to Firmware Upgrade Services
+3. Click ,,start FUS"
+4. Firmware upgrade,,stm32wb5x_FUS_fw" - start addres: 0x080EC000
+5. Firmware upgrade ,,stm32wb5x_BLE_Stack_full_fw" - start addres: 0x080D0000
+
