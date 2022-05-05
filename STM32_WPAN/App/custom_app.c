@@ -96,10 +96,10 @@ void Custom_STM_App_Notification(Custom_STM_App_Notification_evt_t *pNotificatio
     /* USER CODE END CUSTOM_STM_App_Notification_Custom_Evt_Opcode */
 
   /* test_SVC */
-    case CUSTOM_STM_MY_CHAR_READ_EVT:
-      /* USER CODE BEGIN CUSTOM_STM_MY_CHAR_READ_EVT */
+    case CUSTOM_STM_MY_CHAR_WRITE_EVT:
+      /* USER CODE BEGIN CUSTOM_STM_MY_CHAR_WRITE_EVT */
 
-      /* USER CODE END CUSTOM_STM_MY_CHAR_READ_EVT */
+      /* USER CODE END CUSTOM_STM_MY_CHAR_WRITE_EVT */
       break;
 
     default:

@@ -23,7 +23,7 @@
 #include "custom_stm.h"
 
 /* USER CODE BEGIN Includes */
-
+#include "main.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -120,6 +120,7 @@ static SVCCTL_EvtAckStatus_t Custom_STM_Event_Handler(void *Event)
   SVCCTL_EvtAckStatus_t return_value;
   hci_event_pckt *event_pckt;
   evt_blecore_aci *blecore_evt;
+  aci_gatt_attribute_modified_event_rp0 *attribute_modified;
   Custom_STM_App_Notification_evt_t     Notification;
   /* USER CODE BEGIN Custom_STM_Event_Handler_1 */
 
@@ -138,6 +139,14 @@ static SVCCTL_EvtAckStatus_t Custom_STM_Event_Handler(void *Event)
           /* USER CODE BEGIN EVT_BLUE_GATT_ATTRIBUTE_MODIFIED_BEGIN */
 
           /* USER CODE END EVT_BLUE_GATT_ATTRIBUTE_MODIFIED_BEGIN */
+          attribute_modified = (aci_gatt_attribute_modified_event_rp0*)blecore_evt->data;
+          if(attribute_modified->Attr_Handle == (CustomContext.CustomMy_CharHdle + CHARACTERISTIC_VALUE_ATTRIBUTE_OFFSET))
+          {
+            return_value = SVCCTL_EvtAckFlowEnable;
+            /* USER CODE BEGIN CUSTOM_STM_Service_1_Char_1_ACI_GATT_ATTRIBUTE_MODIFIED_VSEVT_CODE */
+            HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
+            /* USER CODE END CUSTOM_STM_Service_1_Char_1_ACI_GATT_ATTRIBUTE_MODIFIED_VSEVT_CODE */
+          } /* if(attribute_modified->Attr_Handle == (CustomContext.CustomMy_CharHdle + CHARACTERISTIC_VALUE_ATTRIBUTE_OFFSET))*/
           /* USER CODE BEGIN EVT_BLUE_GATT_ATTRIBUTE_MODIFIED_END */
 
           /* USER CODE END EVT_BLUE_GATT_ATTRIBUTE_MODIFIED_END */
@@ -235,9 +244,9 @@ void SVCCTL_InitCustomSvc(void)
   aci_gatt_add_char(CustomContext.CustomTest_SvcHdle,
                     UUID_TYPE_128, &uuid,
                     SizeMy_Char,
-                    CHAR_PROP_READ,
+                    CHAR_PROP_WRITE,
                     ATTR_PERMISSION_NONE,
-                    GATT_DONT_NOTIFY_EVENTS,
+                    GATT_NOTIFY_ATTRIBUTE_WRITE,
                     0x10,
                     CHAR_VALUE_LEN_CONSTANT,
                     &(CustomContext.CustomMy_CharHdle));
