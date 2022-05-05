@@ -36,6 +36,7 @@
 typedef struct
 {
   /* test_SVC */
+  uint8_t               My_button_Notification_Status;
   /* USER CODE BEGIN CUSTOM_APP_Context_t */
 
   /* USER CODE END CUSTOM_APP_Context_t */
@@ -78,9 +79,19 @@ uint8_t SecureReadData;
 
 /* Private function prototypes -----------------------------------------------*/
   /* test_SVC */
+static void Custom_My_button_Update_Char(void);
+static void Custom_My_button_Send_Notification(void);
 
 /* USER CODE BEGIN PFP */
-
+void myTask(void)
+{
+	if(!HAL_GPIO_ReadPin(B1_GPIO_Port, B1_Pin))
+	{
+		UpdateCharData[0] += 1;
+		Custom_My_button_Update_Char();
+	}
+	UTIL_SEQ_SetTask(1 << CFG_TASK_MY_TASK, CFG_SCH_PRIO_0);
+}
 /* USER CODE END PFP */
 
 /* Functions Definition ------------------------------------------------------*/
@@ -96,10 +107,22 @@ void Custom_STM_App_Notification(Custom_STM_App_Notification_evt_t *pNotificatio
     /* USER CODE END CUSTOM_STM_App_Notification_Custom_Evt_Opcode */
 
   /* test_SVC */
-    case CUSTOM_STM_MY_CHAR_WRITE_EVT:
-      /* USER CODE BEGIN CUSTOM_STM_MY_CHAR_WRITE_EVT */
+    case CUSTOM_STM_MY_LED_WRITE_EVT:
+      /* USER CODE BEGIN CUSTOM_STM_MY_LED_WRITE_EVT */
 
-      /* USER CODE END CUSTOM_STM_MY_CHAR_WRITE_EVT */
+      /* USER CODE END CUSTOM_STM_MY_LED_WRITE_EVT */
+      break;
+
+    case CUSTOM_STM_MY_BUTTON_NOTIFY_ENABLED_EVT:
+      /* USER CODE BEGIN CUSTOM_STM_MY_BUTTON_NOTIFY_ENABLED_EVT */
+
+      /* USER CODE END CUSTOM_STM_MY_BUTTON_NOTIFY_ENABLED_EVT */
+      break;
+
+    case CUSTOM_STM_MY_BUTTON_NOTIFY_DISABLED_EVT:
+      /* USER CODE BEGIN CUSTOM_STM_MY_BUTTON_NOTIFY_DISABLED_EVT */
+
+      /* USER CODE END CUSTOM_STM_MY_BUTTON_NOTIFY_DISABLED_EVT */
       break;
 
     default:
@@ -170,6 +193,30 @@ void Custom_APP_Init(void)
  *************************************************************/
 
   /* test_SVC */
+void Custom_My_button_Update_Char(void) /* Property Read */
+{
+  Custom_STM_App_Update_Char(CUSTOM_STM_MY_BUTTON, (uint8_t *)UpdateCharData);
+  /* USER CODE BEGIN My_button_UC*/
+
+  /* USER CODE END My_button_UC*/
+  return;
+}
+
+void Custom_My_button_Send_Notification(void) /* Property Notification */
+ {
+  if(Custom_App_Context.My_button_Notification_Status)
+  {
+    Custom_STM_App_Update_Char(CUSTOM_STM_MY_BUTTON, (uint8_t *)NotifyCharData);
+    /* USER CODE BEGIN My_button_NS*/
+
+    /* USER CODE END My_button_NS*/
+  }
+  else
+  {
+    APP_DBG_MSG("-- CUSTOM APPLICATION : CAN'T INFORM CLIENT -  NOTIFICATION DISABLED\n ");
+  }
+  return;
+}
 
 /* USER CODE BEGIN FD_LOCAL_FUNCTIONS*/
 

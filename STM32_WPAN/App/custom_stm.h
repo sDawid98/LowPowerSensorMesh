@@ -35,13 +35,17 @@ extern "C" {
 typedef enum
 {
   /* test_SVC */
-  CUSTOM_STM_MY_CHAR,
+  CUSTOM_STM_MY_LED,
+  CUSTOM_STM_MY_BUTTON,
 } Custom_STM_Char_Opcode_t;
 
 typedef enum
 {
-  /* MY_CHAR */
-  CUSTOM_STM_MY_CHAR_WRITE_EVT,
+  /* MY_LED */
+  CUSTOM_STM_MY_LED_WRITE_EVT,
+  /* MY_BUTTON */
+  CUSTOM_STM_MY_BUTTON_NOTIFY_ENABLED_EVT,
+  CUSTOM_STM_MY_BUTTON_NOTIFY_DISABLED_EVT,
 
   CUSTOM_STM_BOOT_REQUEST_EVT
 } Custom_STM_Opcode_evt_t;
