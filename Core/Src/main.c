@@ -18,10 +18,10 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "dma.h"
 #include "ipcc.h"
 #include "rf.h"
 #include "rtc.h"
-#include "usart.h"
 #include "gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
@@ -97,8 +97,8 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
-  MX_USART1_UART_Init();
   MX_USB_PCD_Init();
+  MX_DMA_Init();
   MX_RF_Init();
   MX_RTC_Init();
   /* USER CODE BEGIN 2 */
