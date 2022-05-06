@@ -37,6 +37,8 @@ typedef struct
 {
   /* test_SVC */
   uint8_t               My_button_Notification_Status;
+  /* AccelerometerSVC */
+  uint8_t               Wibration_Notification_Status;
   /* USER CODE BEGIN CUSTOM_APP_Context_t */
 
   /* USER CODE END CUSTOM_APP_Context_t */
@@ -81,6 +83,9 @@ uint8_t SecureReadData;
   /* test_SVC */
 static void Custom_My_button_Update_Char(void);
 static void Custom_My_button_Send_Notification(void);
+  /* AccelerometerSVC */
+static void Custom_Wibration_Update_Char(void);
+static void Custom_Wibration_Send_Notification(void);
 
 /* USER CODE BEGIN PFP */
 void myTask(void)
@@ -123,6 +128,19 @@ void Custom_STM_App_Notification(Custom_STM_App_Notification_evt_t *pNotificatio
       /* USER CODE BEGIN CUSTOM_STM_MY_BUTTON_NOTIFY_DISABLED_EVT */
 
       /* USER CODE END CUSTOM_STM_MY_BUTTON_NOTIFY_DISABLED_EVT */
+      break;
+
+  /* AccelerometerSVC */
+    case CUSTOM_STM_WIBRATION_NOTIFY_ENABLED_EVT:
+      /* USER CODE BEGIN CUSTOM_STM_WIBRATION_NOTIFY_ENABLED_EVT */
+
+      /* USER CODE END CUSTOM_STM_WIBRATION_NOTIFY_ENABLED_EVT */
+      break;
+
+    case CUSTOM_STM_WIBRATION_NOTIFY_DISABLED_EVT:
+      /* USER CODE BEGIN CUSTOM_STM_WIBRATION_NOTIFY_DISABLED_EVT */
+
+      /* USER CODE END CUSTOM_STM_WIBRATION_NOTIFY_DISABLED_EVT */
       break;
 
     default:
@@ -210,6 +228,32 @@ void Custom_My_button_Send_Notification(void) /* Property Notification */
     /* USER CODE BEGIN My_button_NS*/
 
     /* USER CODE END My_button_NS*/
+  }
+  else
+  {
+    APP_DBG_MSG("-- CUSTOM APPLICATION : CAN'T INFORM CLIENT -  NOTIFICATION DISABLED\n ");
+  }
+  return;
+}
+
+  /* AccelerometerSVC */
+void Custom_Wibration_Update_Char(void) /* Property Read */
+{
+  Custom_STM_App_Update_Char(CUSTOM_STM_WIBRATION, (uint8_t *)UpdateCharData);
+  /* USER CODE BEGIN Wibration_UC*/
+
+  /* USER CODE END Wibration_UC*/
+  return;
+}
+
+void Custom_Wibration_Send_Notification(void) /* Property Notification */
+ {
+  if(Custom_App_Context.Wibration_Notification_Status)
+  {
+    Custom_STM_App_Update_Char(CUSTOM_STM_WIBRATION, (uint8_t *)NotifyCharData);
+    /* USER CODE BEGIN Wibration_NS*/
+
+    /* USER CODE END Wibration_NS*/
   }
   else
   {
