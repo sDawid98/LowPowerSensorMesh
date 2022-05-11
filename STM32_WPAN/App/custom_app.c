@@ -74,7 +74,7 @@ uint8_t UpdateCharData[247];
 uint8_t NotifyCharData[247];
 
 uint8_t SecureReadData;
-
+uint32_t ToSendTimer;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -85,19 +85,18 @@ static void Custom_My_button_Send_Notification(void);
 /* USER CODE BEGIN PFP */
 void myTask(void)
 {
-	uint16_t test = 1234;
+	static uint16_t test = 0;
 
-	UpdateCharData[0] = test >> 8;
-	UpdateCharData[1] = test;
-	Custom_My_button_Update_Char();
-//	static uint32_t ToSendTimer = 0;
+	if(HAL_GetTick() - ToSendTimer > 100)
+	{
+		ToSendTimer = HAL_GetTick();
 
-//	if(HAL_GetTick() - ToSendTimer > 1000)
-//	{
-//		ToSendTimer = HAL_GetTick();
-//		UpdateCharData[0] += 10;
-//		Custom_My_button_Update_Char();
-//	}
+		test += 10;
+		UpdateCharData[0] = test >> 8;
+		UpdateCharData[1] = test;
+
+		Custom_My_button_Update_Char();
+	}
 
 	UTIL_SEQ_SetTask(1 << CFG_TASK_MY_TASK, CFG_SCH_PRIO_0);
 }
