@@ -37,8 +37,6 @@ typedef enum
   /* test_SVC */
   CUSTOM_STM_MY_LED,
   CUSTOM_STM_MY_BUTTON,
-  /* AccelerometerSVC */
-  CUSTOM_STM_WIBRATION,
 } Custom_STM_Char_Opcode_t;
 
 typedef enum
@@ -48,9 +46,6 @@ typedef enum
   /* MY_BUTTON */
   CUSTOM_STM_MY_BUTTON_NOTIFY_ENABLED_EVT,
   CUSTOM_STM_MY_BUTTON_NOTIFY_DISABLED_EVT,
-  /* Wibration */
-  CUSTOM_STM_WIBRATION_NOTIFY_ENABLED_EVT,
-  CUSTOM_STM_WIBRATION_NOTIFY_DISABLED_EVT,
 
   CUSTOM_STM_BOOT_REQUEST_EVT
 } Custom_STM_Opcode_evt_t;
