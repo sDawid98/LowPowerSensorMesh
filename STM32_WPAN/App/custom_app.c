@@ -1,22 +1,21 @@
-
 /* USER CODE BEGIN Header */
 /**
-  ******************************************************************************
-  * @file    App/custom_app.c
-  * @author  MCD Application Team
-  * @brief   Custom Example Application (Server)
-  ******************************************************************************
-  * @attention
-  *
-  * Copyright (c) 2022 STMicroelectronics.
-  * All rights reserved.
-  *
-  * This software is licensed under terms that can be found in the LICENSE file
-  * in the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
-  *
-  ******************************************************************************
-  */
+ ******************************************************************************
+ * @file    App/custom_app.c
+ * @author  MCD Application Team
+ * @brief   Custom Example Application (Server)
+ ******************************************************************************
+ * @attention
+ *
+ * Copyright (c) 2022 STMicroelectronics.
+ * All rights reserved.
+ *
+ * This software is licensed under terms that can be found in the LICENSE file
+ * in the root directory of this software component.
+ * If no LICENSE file comes with this software, it is provided AS-IS.
+ *
+ ******************************************************************************
+ */
 /* USER CODE END Header */
 
 /* Includes ------------------------------------------------------------------*/
@@ -36,15 +35,15 @@
 /* Private typedef -----------------------------------------------------------*/
 typedef struct
 {
-  /* test_SVC */
-  uint8_t               My_button_Notification_Status;
-  /* AccelerometerSVC */
-  uint8_t               Wibration_Notification_Status;
-  /* USER CODE BEGIN CUSTOM_APP_Context_t */
+	/* test_SVC */
+	uint8_t               My_button_Notification_Status;
+	/* AccelerometerSVC */
+	uint8_t               Wibration_Notification_Status;
+	/* USER CODE BEGIN CUSTOM_APP_Context_t */
 
-  /* USER CODE END CUSTOM_APP_Context_t */
+	/* USER CODE END CUSTOM_APP_Context_t */
 
-  uint16_t              ConnectionHandle;
+	uint16_t              ConnectionHandle;
 } Custom_App_Context_t;
 
 /* USER CODE BEGIN PTD */
@@ -81,21 +80,29 @@ uint8_t SecureReadData;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
-  /* test_SVC */
+/* test_SVC */
 static void Custom_My_button_Update_Char(void);
 static void Custom_My_button_Send_Notification(void);
-  /* AccelerometerSVC */
+/* AccelerometerSVC */
 static void Custom_Wibration_Update_Char(void);
 static void Custom_Wibration_Send_Notification(void);
 
 /* USER CODE BEGIN PFP */
 void myTask(void)
 {
-	if(!HAL_GPIO_ReadPin(B1_GPIO_Port, B1_Pin))
+	static uint32_t ToSendTimer = 0;
+
+	if(HAL_GetTick() - ToSendTimer > 1000)
 	{
-		UpdateCharData[0] += 1;
+		ToSendTimer = HAL_GetTick();
+		UpdateCharData[0] += 10;
 		Custom_My_button_Update_Char();
 	}
+	//	if(!HAL_GPIO_ReadPin(B1_GPIO_Port, B1_Pin))
+	//	{
+	//		UpdateCharData[0] += 1;
+	//		Custom_My_button_Update_Char();
+	//	}
 	UTIL_SEQ_SetTask(1 << CFG_TASK_MY_TASK, CFG_SCH_PRIO_0);
 }
 /* USER CODE END PFP */
@@ -103,102 +110,102 @@ void myTask(void)
 /* Functions Definition ------------------------------------------------------*/
 void Custom_STM_App_Notification(Custom_STM_App_Notification_evt_t *pNotification)
 {
-  /* USER CODE BEGIN CUSTOM_STM_App_Notification_1 */
+	/* USER CODE BEGIN CUSTOM_STM_App_Notification_1 */
 
-  /* USER CODE END CUSTOM_STM_App_Notification_1 */
-  switch(pNotification->Custom_Evt_Opcode)
-  {
-    /* USER CODE BEGIN CUSTOM_STM_App_Notification_Custom_Evt_Opcode */
+	/* USER CODE END CUSTOM_STM_App_Notification_1 */
+	switch(pNotification->Custom_Evt_Opcode)
+	{
+	/* USER CODE BEGIN CUSTOM_STM_App_Notification_Custom_Evt_Opcode */
 
-    /* USER CODE END CUSTOM_STM_App_Notification_Custom_Evt_Opcode */
+	/* USER CODE END CUSTOM_STM_App_Notification_Custom_Evt_Opcode */
 
-  /* test_SVC */
-    case CUSTOM_STM_MY_LED_WRITE_EVT:
-      /* USER CODE BEGIN CUSTOM_STM_MY_LED_WRITE_EVT */
+	/* test_SVC */
+	case CUSTOM_STM_MY_LED_WRITE_EVT:
+		/* USER CODE BEGIN CUSTOM_STM_MY_LED_WRITE_EVT */
 
-      /* USER CODE END CUSTOM_STM_MY_LED_WRITE_EVT */
-      break;
+		/* USER CODE END CUSTOM_STM_MY_LED_WRITE_EVT */
+		break;
 
-    case CUSTOM_STM_MY_BUTTON_NOTIFY_ENABLED_EVT:
-      /* USER CODE BEGIN CUSTOM_STM_MY_BUTTON_NOTIFY_ENABLED_EVT */
+	case CUSTOM_STM_MY_BUTTON_NOTIFY_ENABLED_EVT:
+		/* USER CODE BEGIN CUSTOM_STM_MY_BUTTON_NOTIFY_ENABLED_EVT */
 
-      /* USER CODE END CUSTOM_STM_MY_BUTTON_NOTIFY_ENABLED_EVT */
-      break;
+		/* USER CODE END CUSTOM_STM_MY_BUTTON_NOTIFY_ENABLED_EVT */
+		break;
 
-    case CUSTOM_STM_MY_BUTTON_NOTIFY_DISABLED_EVT:
-      /* USER CODE BEGIN CUSTOM_STM_MY_BUTTON_NOTIFY_DISABLED_EVT */
+	case CUSTOM_STM_MY_BUTTON_NOTIFY_DISABLED_EVT:
+		/* USER CODE BEGIN CUSTOM_STM_MY_BUTTON_NOTIFY_DISABLED_EVT */
 
-      /* USER CODE END CUSTOM_STM_MY_BUTTON_NOTIFY_DISABLED_EVT */
-      break;
+		/* USER CODE END CUSTOM_STM_MY_BUTTON_NOTIFY_DISABLED_EVT */
+		break;
 
-  /* AccelerometerSVC */
-    case CUSTOM_STM_WIBRATION_NOTIFY_ENABLED_EVT:
-      /* USER CODE BEGIN CUSTOM_STM_WIBRATION_NOTIFY_ENABLED_EVT */
+		/* AccelerometerSVC */
+	case CUSTOM_STM_WIBRATION_NOTIFY_ENABLED_EVT:
+		/* USER CODE BEGIN CUSTOM_STM_WIBRATION_NOTIFY_ENABLED_EVT */
 
-      /* USER CODE END CUSTOM_STM_WIBRATION_NOTIFY_ENABLED_EVT */
-      break;
+		/* USER CODE END CUSTOM_STM_WIBRATION_NOTIFY_ENABLED_EVT */
+		break;
 
-    case CUSTOM_STM_WIBRATION_NOTIFY_DISABLED_EVT:
-      /* USER CODE BEGIN CUSTOM_STM_WIBRATION_NOTIFY_DISABLED_EVT */
+	case CUSTOM_STM_WIBRATION_NOTIFY_DISABLED_EVT:
+		/* USER CODE BEGIN CUSTOM_STM_WIBRATION_NOTIFY_DISABLED_EVT */
 
-      /* USER CODE END CUSTOM_STM_WIBRATION_NOTIFY_DISABLED_EVT */
-      break;
+		/* USER CODE END CUSTOM_STM_WIBRATION_NOTIFY_DISABLED_EVT */
+		break;
 
-    default:
-      /* USER CODE BEGIN CUSTOM_STM_App_Notification_default */
+	default:
+		/* USER CODE BEGIN CUSTOM_STM_App_Notification_default */
 
-      /* USER CODE END CUSTOM_STM_App_Notification_default */
-      break;
-  }
-  /* USER CODE BEGIN CUSTOM_STM_App_Notification_2 */
+		/* USER CODE END CUSTOM_STM_App_Notification_default */
+		break;
+	}
+	/* USER CODE BEGIN CUSTOM_STM_App_Notification_2 */
 
-  /* USER CODE END CUSTOM_STM_App_Notification_2 */
-  return;
+	/* USER CODE END CUSTOM_STM_App_Notification_2 */
+	return;
 }
 
 void Custom_APP_Notification(Custom_App_ConnHandle_Not_evt_t *pNotification)
 {
-  /* USER CODE BEGIN CUSTOM_APP_Notification_1 */
+	/* USER CODE BEGIN CUSTOM_APP_Notification_1 */
 
-  /* USER CODE END CUSTOM_APP_Notification_1 */
+	/* USER CODE END CUSTOM_APP_Notification_1 */
 
-  switch(pNotification->Custom_Evt_Opcode)
-  {
-    /* USER CODE BEGIN CUSTOM_APP_Notification_Custom_Evt_Opcode */
+	switch(pNotification->Custom_Evt_Opcode)
+	{
+	/* USER CODE BEGIN CUSTOM_APP_Notification_Custom_Evt_Opcode */
 
-    /* USER CODE END P2PS_CUSTOM_Notification_Custom_Evt_Opcode */
-    case CUSTOM_CONN_HANDLE_EVT :
-      /* USER CODE BEGIN CUSTOM_CONN_HANDLE_EVT */
+	/* USER CODE END P2PS_CUSTOM_Notification_Custom_Evt_Opcode */
+	case CUSTOM_CONN_HANDLE_EVT :
+		/* USER CODE BEGIN CUSTOM_CONN_HANDLE_EVT */
 
-      /* USER CODE END CUSTOM_CONN_HANDLE_EVT */
-      break;
+		/* USER CODE END CUSTOM_CONN_HANDLE_EVT */
+		break;
 
-    case CUSTOM_DISCON_HANDLE_EVT :
-      /* USER CODE BEGIN CUSTOM_DISCON_HANDLE_EVT */
+	case CUSTOM_DISCON_HANDLE_EVT :
+		/* USER CODE BEGIN CUSTOM_DISCON_HANDLE_EVT */
 
-      /* USER CODE END CUSTOM_DISCON_HANDLE_EVT */
-      break;
+		/* USER CODE END CUSTOM_DISCON_HANDLE_EVT */
+		break;
 
-    default:
-      /* USER CODE BEGIN CUSTOM_APP_Notification_default */
+	default:
+		/* USER CODE BEGIN CUSTOM_APP_Notification_default */
 
-      /* USER CODE END CUSTOM_APP_Notification_default */
-      break;
-  }
+		/* USER CODE END CUSTOM_APP_Notification_default */
+		break;
+	}
 
-  /* USER CODE BEGIN CUSTOM_APP_Notification_2 */
+	/* USER CODE BEGIN CUSTOM_APP_Notification_2 */
 
-  /* USER CODE END CUSTOM_APP_Notification_2 */
+	/* USER CODE END CUSTOM_APP_Notification_2 */
 
-  return;
+	return;
 }
 
 void Custom_APP_Init(void)
 {
-  /* USER CODE BEGIN CUSTOM_APP_Init */
+	/* USER CODE BEGIN CUSTOM_APP_Init */
 
-  /* USER CODE END CUSTOM_APP_Init */
-  return;
+	/* USER CODE END CUSTOM_APP_Init */
+	return;
 }
 
 /* USER CODE BEGIN FD */
@@ -211,56 +218,56 @@ void Custom_APP_Init(void)
  *
  *************************************************************/
 
-  /* test_SVC */
+/* test_SVC */
 void Custom_My_button_Update_Char(void) /* Property Read */
 {
-  Custom_STM_App_Update_Char(CUSTOM_STM_MY_BUTTON, (uint8_t *)UpdateCharData);
-  /* USER CODE BEGIN My_button_UC*/
+	Custom_STM_App_Update_Char(CUSTOM_STM_MY_BUTTON, (uint8_t *)UpdateCharData);
+	/* USER CODE BEGIN My_button_UC*/
 
-  /* USER CODE END My_button_UC*/
-  return;
+	/* USER CODE END My_button_UC*/
+	return;
 }
 
 void Custom_My_button_Send_Notification(void) /* Property Notification */
- {
-  if(Custom_App_Context.My_button_Notification_Status)
-  {
-    Custom_STM_App_Update_Char(CUSTOM_STM_MY_BUTTON, (uint8_t *)NotifyCharData);
-    /* USER CODE BEGIN My_button_NS*/
+{
+	if(Custom_App_Context.My_button_Notification_Status)
+	{
+		Custom_STM_App_Update_Char(CUSTOM_STM_MY_BUTTON, (uint8_t *)NotifyCharData);
+		/* USER CODE BEGIN My_button_NS*/
 
-    /* USER CODE END My_button_NS*/
-  }
-  else
-  {
-    APP_DBG_MSG("-- CUSTOM APPLICATION : CAN'T INFORM CLIENT -  NOTIFICATION DISABLED\n ");
-  }
-  return;
+		/* USER CODE END My_button_NS*/
+	}
+	else
+	{
+		APP_DBG_MSG("-- CUSTOM APPLICATION : CAN'T INFORM CLIENT -  NOTIFICATION DISABLED\n ");
+	}
+	return;
 }
 
-  /* AccelerometerSVC */
+/* AccelerometerSVC */
 void Custom_Wibration_Update_Char(void) /* Property Read */
 {
-  Custom_STM_App_Update_Char(CUSTOM_STM_WIBRATION, (uint8_t *)UpdateCharData);
-  /* USER CODE BEGIN Wibration_UC*/
+	Custom_STM_App_Update_Char(CUSTOM_STM_WIBRATION, (uint8_t *)UpdateCharData);
+	/* USER CODE BEGIN Wibration_UC*/
 
-  /* USER CODE END Wibration_UC*/
-  return;
+	/* USER CODE END Wibration_UC*/
+	return;
 }
 
 void Custom_Wibration_Send_Notification(void) /* Property Notification */
- {
-  if(Custom_App_Context.Wibration_Notification_Status)
-  {
-    Custom_STM_App_Update_Char(CUSTOM_STM_WIBRATION, (uint8_t *)NotifyCharData);
-    /* USER CODE BEGIN Wibration_NS*/
+{
+	if(Custom_App_Context.Wibration_Notification_Status)
+	{
+		Custom_STM_App_Update_Char(CUSTOM_STM_WIBRATION, (uint8_t *)NotifyCharData);
+		/* USER CODE BEGIN Wibration_NS*/
 
-    /* USER CODE END Wibration_NS*/
-  }
-  else
-  {
-    APP_DBG_MSG("-- CUSTOM APPLICATION : CAN'T INFORM CLIENT -  NOTIFICATION DISABLED\n ");
-  }
-  return;
+		/* USER CODE END Wibration_NS*/
+	}
+	else
+	{
+		APP_DBG_MSG("-- CUSTOM APPLICATION : CAN'T INFORM CLIENT -  NOTIFICATION DISABLED\n ");
+	}
+	return;
 }
 
 /* USER CODE BEGIN FD_LOCAL_FUNCTIONS*/
