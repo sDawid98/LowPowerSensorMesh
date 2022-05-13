@@ -61,6 +61,14 @@ typedef enum {
 
 typedef struct
 {
-
+	SPI_HandleTypeDef *AccSPI;
+	int32_t Xwibration;
+	int32_t Ywibration;
+	int32_t Zwibration;
 }Accelerometer_t;
+
+extern Accelerometer_t Accel;
+
+void AccInit(SPI_HandleTypeDef *UsedAccSpi);
+void AccReadAllAxisData(uint8_t RegisterToWrite);
 
