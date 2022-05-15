@@ -27,7 +27,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "LIS3DH.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -104,7 +104,8 @@ int main(void)
   MX_RTC_Init();
   MX_SPI1_Init();
   /* USER CODE BEGIN 2 */
-
+  AccInit(&hspi1);
+  HAL_Delay(100);
   /* USER CODE END 2 */
 
   /* Init code for STM32_WPAN */
@@ -117,6 +118,10 @@ int main(void)
     MX_APPE_Process();
 
     /* USER CODE BEGIN 3 */
+    if(HAL_GetTick() - Accel.AccDataGetTime > ACCEL_DATA_GET_INTERVAL_MS)
+    {
+    	AccReadAllAxisData(LIS3DH_REG_OUT_X_L);
+    }
   }
   /* USER CODE END 3 */
 }
