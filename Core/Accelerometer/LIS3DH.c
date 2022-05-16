@@ -26,6 +26,7 @@ void AccWriteData(uint8_t Register, uint8_t Data)
 }
 void AccConfiguration(void)
 {
+	AccWriteData(LIS3DH_REG_CTRL4, LIS3DH_REG_CTRL4_HR_ON);
 	AccWriteData(LIS3DH_REG_CTRL1, LIS3DH_DATARATE_10_HZ);
 }
 void AccInit(SPI_HandleTypeDef *UsedAccSpi)

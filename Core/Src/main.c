@@ -105,17 +105,16 @@ int main(void)
   MX_SPI1_Init();
   /* USER CODE BEGIN 2 */
   AccInit(&hspi1);
-  HAL_Delay(100);
   /* USER CODE END 2 */
 
   /* Init code for STM32_WPAN */
-  MX_APPE_Init();
+//  MX_APPE_Init();
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
     /* USER CODE END WHILE */
-    MX_APPE_Process();
+//    MX_APPE_Process();
 
     /* USER CODE BEGIN 3 */
     if(HAL_GetTick() - Accel.AccDataGetTime > ACCEL_DATA_GET_INTERVAL_MS)
