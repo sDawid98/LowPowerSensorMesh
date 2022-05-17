@@ -87,7 +87,7 @@ void AccInit(SPI_HandleTypeDef *UsedAccSpi);
 void AccInit(I2C_HandleTypeDef *UsedAccI2c);
 #endif
 
-void AccReadAllAxisData(uint8_t RegisterToWrite);
+void AccReadAllAxisData();
 void AccWrite(uint8_t Register, uint8_t Data);
 void AccSpiSendByte(uint8_t *Data, uint32_t Length);
 

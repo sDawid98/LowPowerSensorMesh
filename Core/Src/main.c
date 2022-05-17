@@ -106,7 +106,7 @@ int main(void)
   MX_SPI1_Init();
   MX_I2C1_Init();
   /* USER CODE BEGIN 2 */
-  AccInit(&hspi1);
+
   /* USER CODE END 2 */
 
   /* Init code for STM32_WPAN */

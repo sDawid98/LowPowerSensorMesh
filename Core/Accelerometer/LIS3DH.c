@@ -36,16 +36,19 @@ void AccWrite(uint8_t Register, uint8_t Data)
 {
 	uint8_t DataToSend[2] = {0};
 
+#ifdef ACC_SPI
 	DataToSend[0] = Register & 0x7F;
+#elif defined(ACC_I2C)
+	DataToSend[0] = Register;
+#endif
 	DataToSend[1] = Data;
-
 	AccSpiSendByte(DataToSend, 2);
 }
 
 void AccConfiguration(void)
 {
 	AccWrite(LIS3DH_REG_CTRL1, 0x77); 	//400Hz =, all axis enabled
-	AccWrite(LIS3DH_REG_CTRL4, 0x88);	//BDU enabled, High resolution enabled
+	AccWrite(LIS3DH_REG_CTRL4, 0x28);	//BDU enabled, High resolution enabled
 }
 #ifdef ACC_SPI
 void AccInit(SPI_HandleTypeDef *UsedAccSpi)
@@ -65,18 +68,22 @@ void AccInit(I2C_HandleTypeDef *UsedAccI2c)
 }
 #endif
 
-void AccReadAllAxisData(uint8_t RegisterToRead)
+void AccReadAllAxisData()
 {
 	uint8_t AllAxisData[6] = {0};
 	uint8_t Register = 0;
 
-	Register = RegisterToRead | 0xC0; //first bit 1 - read, secodn bit 1 - increment address
 
-	//	AccSendByte(&Register);
-
+#ifdef ACC_SPI
+	Register = LIS3DH_REG_OUT_X_L | 0xC0; //first bit 1 - read, secodn bit 1 - increment address
 	HAL_SPI_Transmit(Accel.AccSPI, &Register, 1, 10);
 	HAL_SPI_Receive(Accel.AccSPI, AllAxisData, 6, 10);
+#elif defined(ACC_I2C)
+	Register = LIS3DH_REG_OUT_X_L | 0x80; //Multiple data read on
 
+	HAL_I2C_Master_Transmit(Accel.AccI2C, Accel.AccI2cAddress <<  1, &Register, 1, 10);
+	HAL_I2C_Master_Receive(Accel.AccI2C, Accel.AccI2cAddress <<  1, AllAxisData, 6, 10);
+#endif
 	Accel.Xwibration = AllAxisData[0] | AllAxisData[1] << 8;
 	Accel.Ywibration = AllAxisData[2] | AllAxisData[3] << 8;
 	Accel.Zwibration = AllAxisData[4] | AllAxisData[5] << 8;
