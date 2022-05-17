@@ -32,6 +32,10 @@
 #define ACCEL_DATA_GET_INTERVAL_MS		100
 #define LIS3DH_REG_CTRL4_HR_ON 			0x08
 
+#define ACC_I2C_ADDRESS 				0x18
+#define ACC_I2C								//if SPI is used change this define to ,,ACC_SPI"
+
+
 /** A structure to represent scales **/
 typedef enum {
 	LIS3DH_RANGE_16_G = 0b11, // +/- 16g
@@ -65,6 +69,9 @@ typedef enum {
 typedef struct
 {
 	SPI_HandleTypeDef *AccSPI;
+	I2C_HandleTypeDef *AccI2C;
+	uint8_t AccI2cAddress;
+
 	int16_t Xwibration;
 	int16_t Ywibration;
 	int16_t Zwibration;
@@ -74,6 +81,13 @@ typedef struct
 
 extern Accelerometer_t Accel;
 
+#ifdef ACC_SPI
 void AccInit(SPI_HandleTypeDef *UsedAccSpi);
+#elif defined(ACC_I2C)
+void AccInit(I2C_HandleTypeDef *UsedAccI2c);
+#endif
+
 void AccReadAllAxisData(uint8_t RegisterToWrite);
+void AccWrite(uint8_t Register, uint8_t Data);
+void AccSpiSendByte(uint8_t *Data, uint32_t Length);
 
