@@ -18,6 +18,7 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "adc.h"
 #include "dma.h"
 #include "i2c.h"
 #include "ipcc.h"
@@ -48,7 +49,7 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-
+uint16_t PT100Adc[32];
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -105,8 +106,10 @@ int main(void)
   MX_RTC_Init();
   MX_SPI1_Init();
   MX_I2C1_Init();
+  MX_ADC1_Init();
   /* USER CODE BEGIN 2 */
-
+//  HAL_DMA_Start_IT(&hdma_adc1, SrcAddress, DstAddress, DataLength)
+  HAL_ADC_Start_DMA(&hadc1, (uint32_t *)PT100Adc , 32);
   /* USER CODE END 2 */
 
   /* Init code for STM32_WPAN */
@@ -197,7 +200,15 @@ void PeriphCommonClock_Config(void)
 
   /** Initializes the peripherals clock
   */
-  PeriphClkInitStruct.PeriphClockSelection = RCC_PERIPHCLK_SMPS|RCC_PERIPHCLK_RFWAKEUP;
+  PeriphClkInitStruct.PeriphClockSelection = RCC_PERIPHCLK_SMPS|RCC_PERIPHCLK_RFWAKEUP
+                              |RCC_PERIPHCLK_USB|RCC_PERIPHCLK_ADC;
+  PeriphClkInitStruct.PLLSAI1.PLLN = 24;
+  PeriphClkInitStruct.PLLSAI1.PLLP = RCC_PLLP_DIV2;
+  PeriphClkInitStruct.PLLSAI1.PLLQ = RCC_PLLQ_DIV2;
+  PeriphClkInitStruct.PLLSAI1.PLLR = RCC_PLLR_DIV2;
+  PeriphClkInitStruct.PLLSAI1.PLLSAI1ClockOut = RCC_PLLSAI1_USBCLK|RCC_PLLSAI1_ADCCLK;
+  PeriphClkInitStruct.UsbClockSelection = RCC_USBCLKSOURCE_PLLSAI1;
+  PeriphClkInitStruct.AdcClockSelection = RCC_ADCCLKSOURCE_PLLSAI1;
   PeriphClkInitStruct.RFWakeUpClockSelection = RCC_RFWKPCLKSOURCE_LSE;
   PeriphClkInitStruct.SmpsClockSelection = RCC_SMPSCLKSOURCE_HSI;
   PeriphClkInitStruct.SmpsDivSelection = RCC_SMPSCLKDIV_RANGE1;

@@ -58,10 +58,13 @@ void SysTick_Handler(void);
 void RTC_WKUP_IRQHandler(void);
 void DMA1_Channel1_IRQHandler(void);
 void DMA1_Channel2_IRQHandler(void);
+void DMA1_Channel3_IRQHandler(void);
+void ADC1_IRQHandler(void);
 void USART1_IRQHandler(void);
 void IPCC_C1_RX_IRQHandler(void);
 void IPCC_C1_TX_IRQHandler(void);
 void HSEM_IRQHandler(void);
+void DMAMUX1_OVR_IRQHandler(void);
 /* USER CODE BEGIN EFP */
 
 /* USER CODE END EFP */
