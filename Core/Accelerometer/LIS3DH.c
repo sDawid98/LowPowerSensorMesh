@@ -47,8 +47,8 @@ void AccWrite(uint8_t Register, uint8_t Data)
 
 void AccConfiguration(void)
 {
-	AccWrite(LIS3DH_REG_CTRL1, 0x77); 	//400Hz =, all axis enabled
-	AccWrite(LIS3DH_REG_CTRL4, 0x28);	//BDU enabled, High resolution enabled
+	AccWrite(LIS3DH_REG_CTRL1, LIS3DH_ALL_AXIS_ENABLED | LIS3DH_400_Hz_DATARATE_ENABLED); 	//400Hz =, all axis enabled
+	AccWrite(LIS3DH_REG_CTRL4, LIS3DH_HR_ENABLED | LIS3DH_BDU_ENABLED);	//BDU enabled, High resolution enabled
 }
 #ifdef ACC_SPI
 void AccInit(SPI_HandleTypeDef *UsedAccSpi)

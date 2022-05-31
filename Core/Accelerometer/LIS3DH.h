@@ -35,6 +35,12 @@
 #define ACC_I2C_ADDRESS 				0x18
 #define ACC_I2C								//if SPI is used change this define to ,,ACC_SPI"
 
+#define LIS3DH_BDU_ENABLED				(1 << 7)
+#define LIS3DH_HR_ENABLED				(1 << 3)
+
+#define LIS3DH_ALL_AXIS_ENABLED			(7 << 0)
+#define LIS3DH_400_Hz_DATARATE_ENABLED	(7 << 4)
+
 
 /** A structure to represent scales **/
 typedef enum {
