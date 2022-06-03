@@ -107,8 +107,8 @@ int main(void)
   MX_RTC_Init();
   MX_ADC1_Init();
   /* USER CODE BEGIN 2 */
-  HAL_ADC_Start_DMA(&hadc1, (uint32_t *)PT100AdcBuffor , PT100_ADC_BUFFOR_SIZE);
-  AccInit(&hi2c1);
+//  HAL_ADC_Start_DMA(&hadc1, (uint32_t *)PT100AdcBuffor , PT100_ADC_BUFFOR_SIZE);
+//  AccInit(&hi2c1);
   /* USER CODE END 2 */
 
   /* Init code for STM32_WPAN */
@@ -121,7 +121,6 @@ int main(void)
     MX_APPE_Process();
 
     /* USER CODE BEGIN 3 */
-
   }
   /* USER CODE END 3 */
 }

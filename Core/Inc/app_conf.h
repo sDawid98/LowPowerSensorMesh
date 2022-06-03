@@ -562,6 +562,7 @@ typedef enum
 #define MAX_DBG_TRACE_MSG_SIZE 1024
 
 /* USER CODE BEGIN Defines */
+void SystemInitialize(void);
 void myTask(void);
 void AccelerometerTask(void);
 /* USER CODE END Defines */
@@ -586,6 +587,7 @@ typedef enum
 #endif
     CFG_TASK_HCI_ASYNCH_EVT_ID,
     /* USER CODE BEGIN CFG_Task_Id_With_HCI_Cmd_t */
+	CFG_TASK_SYS_INIT,
 	CFG_TASK_MY_TASK,
 	CFG_TASK_ACCELEROMETER,
     /* USER CODE END CFG_Task_Id_With_HCI_Cmd_t */

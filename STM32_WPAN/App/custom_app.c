@@ -29,7 +29,10 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "adc.h"
+#include "i2c.h"
 #include "LIS3DH.h"
+#include "PT100.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -83,6 +86,11 @@ static void Custom_My_button_Update_Char(void);
 static void Custom_My_button_Send_Notification(void);
 
 /* USER CODE BEGIN PFP */
+void SystemInitialize(void)
+{
+	HAL_ADC_Start_DMA(&hadc1, (uint32_t *)PT100AdcBuffor , PT100_ADC_BUFFOR_SIZE);
+	AccInit(&hi2c1);
+}
 void myTask(void)
 {
 	static uint16_t test = 0;
