@@ -256,7 +256,7 @@ void DMA1_Channel3_IRQHandler(void)
   /* USER CODE END DMA1_Channel3_IRQn 0 */
   HAL_DMA_IRQHandler(&hdma_adc1);
   /* USER CODE BEGIN DMA1_Channel3_IRQn 1 */
-
+  //TODO: add PT100 routine
   /* USER CODE END DMA1_Channel3_IRQn 1 */
 }
 
@@ -328,20 +328,6 @@ void HSEM_IRQHandler(void)
   /* USER CODE BEGIN HSEM_IRQn 1 */
 
   /* USER CODE END HSEM_IRQn 1 */
-}
-
-/**
-  * @brief This function handles DMAMUX1 overrun interrupt.
-  */
-void DMAMUX1_OVR_IRQHandler(void)
-{
-  /* USER CODE BEGIN DMAMUX1_OVR_IRQn 0 */
-
-  /* USER CODE END DMAMUX1_OVR_IRQn 0 */
-
-  /* USER CODE BEGIN DMAMUX1_OVR_IRQn 1 */
-
-  /* USER CODE END DMAMUX1_OVR_IRQn 1 */
 }
 
 /* USER CODE BEGIN 1 */

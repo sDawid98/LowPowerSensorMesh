@@ -10,7 +10,7 @@
 
 Accelerometer_t Accel = {0};
 
-void AccSpiSendByte(uint8_t *Data, uint32_t Length)
+void AccSendByte(uint8_t *Data, uint32_t Length)
 {
 #ifdef ACC_SPI
 	//Taken from HAL function
@@ -42,7 +42,7 @@ void AccWrite(uint8_t Register, uint8_t Data)
 	DataToSend[0] = Register;
 #endif
 	DataToSend[1] = Data;
-	AccSpiSendByte(DataToSend, 2);
+	AccSendByte(DataToSend, 2);
 }
 
 void AccConfiguration(void)

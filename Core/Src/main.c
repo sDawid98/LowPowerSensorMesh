@@ -24,7 +24,6 @@
 #include "ipcc.h"
 #include "rf.h"
 #include "rtc.h"
-#include "spi.h"
 #include "gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
@@ -50,7 +49,7 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-uint16_t PT100Adc[32];
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -104,12 +103,11 @@ int main(void)
   MX_USB_PCD_Init();
   MX_DMA_Init();
   MX_RF_Init();
-  MX_RTC_Init();
-  MX_SPI1_Init();
   MX_I2C1_Init();
+  MX_RTC_Init();
   MX_ADC1_Init();
   /* USER CODE BEGIN 2 */
-  HAL_ADC_Start_DMA(&hadc1, (uint32_t *)PT100Adc , PT100_ADC_BUFFOR_SIZE);
+  HAL_ADC_Start_DMA(&hadc1, (uint32_t *)PT100AdcBuffor , PT100_ADC_BUFFOR_SIZE);
   AccInit(&hi2c1);
   /* USER CODE END 2 */
 
@@ -123,10 +121,7 @@ int main(void)
     MX_APPE_Process();
 
     /* USER CODE BEGIN 3 */
-    if(HAL_GetTick() - Accel.AccDataGetTime > ACCEL_DATA_GET_INTERVAL_MS)
-    {
-    	AccReadAllAxisData(LIS3DH_REG_OUT_X_L);
-    }
+
   }
   /* USER CODE END 3 */
 }

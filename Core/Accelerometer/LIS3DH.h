@@ -41,41 +41,15 @@
 #define LIS3DH_ALL_AXIS_ENABLED			(7 << 0)
 #define LIS3DH_400_Hz_DATARATE_ENABLED	(7 << 4)
 
-
-/** A structure to represent scales **/
-typedef enum {
-	LIS3DH_RANGE_16_G = 0b11, // +/- 16g
-	LIS3DH_RANGE_8_G = 0b10,  // +/- 8g
-	LIS3DH_RANGE_4_G = 0b01,  // +/- 4g
-	LIS3DH_RANGE_2_G = 0b00   // +/- 2g (default value)
-} lis3dh_range_t;
-
-/** A structure to represent axes **/
-typedef enum {
-	LIS3DH_AXIS_X = 0x0,
-	LIS3DH_AXIS_Y = 0x1,
-	LIS3DH_AXIS_Z = 0x2,
-} lis3dh_axis_t;
-
-/** Used with register 0x2A (LIS3DH_REG_CTRL_REG1) to set bandwidth **/
-typedef enum {
-	LIS3DH_DATARATE_400_HZ = 0b0111, //  400Hz
-	LIS3DH_DATARATE_200_HZ = 0b0110, //  200Hz
-	LIS3DH_DATARATE_100_HZ = 0b0101, //  100Hz
-	LIS3DH_DATARATE_50_HZ = 0b0100,  //   50Hz
-	LIS3DH_DATARATE_25_HZ = 0b0011,  //   25Hz
-	LIS3DH_DATARATE_10_HZ = 0b0010,  // 10 Hz
-	LIS3DH_DATARATE_1_HZ = 0b0001,   // 1 Hz
-	LIS3DH_DATARATE_POWERDOWN = 0,
-	LIS3DH_DATARATE_LOWPOWER_1K6HZ = 0b1000,
-	LIS3DH_DATARATE_LOWPOWER_5KHZ = 0b1001,
-
-} lis3dh_dataRate_t;
+#define ACC_GET_MEAS_INTERVAL 			10	//unit: [ms]
 
 typedef struct
 {
+#ifdef ACC_SPI
 	SPI_HandleTypeDef *AccSPI;
+#elif defined(ACC_I2C)
 	I2C_HandleTypeDef *AccI2C;
+#endif
 	uint8_t AccI2cAddress;
 
 	int16_t Xwibration;
@@ -95,5 +69,5 @@ void AccInit(I2C_HandleTypeDef *UsedAccI2c);
 
 void AccReadAllAxisData();
 void AccWrite(uint8_t Register, uint8_t Data);
-void AccSpiSendByte(uint8_t *Data, uint32_t Length);
+void AccSendByte(uint8_t *Data, uint32_t Length);
 

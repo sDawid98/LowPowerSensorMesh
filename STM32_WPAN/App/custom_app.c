@@ -29,7 +29,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "LIS3DH.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -99,6 +99,18 @@ void myTask(void)
 	}
 
 	UTIL_SEQ_SetTask(1 << CFG_TASK_MY_TASK, CFG_SCH_PRIO_0);
+}
+void AccelerometerTask(void)
+{
+	static uint32_t AccGetMeasTimer = 0;
+
+	if(HAL_GetTick() - AccGetMeasTimer > ACC_GET_MEAS_INTERVAL)
+	{
+		AccGetMeasTimer = HAL_GetTick();
+
+		AccReadAllAxisData();
+	}
+	UTIL_SEQ_SetTask(1 << CFG_TASK_ACCELEROMETER, CFG_SCH_PRIO_0); //Scheduler will run it once
 }
 /* USER CODE END PFP */
 
