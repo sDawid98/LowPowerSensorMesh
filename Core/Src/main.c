@@ -30,6 +30,7 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "LIS3DH.h"
+#include "PT100.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -108,8 +109,8 @@ int main(void)
   MX_I2C1_Init();
   MX_ADC1_Init();
   /* USER CODE BEGIN 2 */
-//  HAL_DMA_Start_IT(&hdma_adc1, SrcAddress, DstAddress, DataLength)
-  HAL_ADC_Start_DMA(&hadc1, (uint32_t *)PT100Adc , 32);
+  HAL_ADC_Start_DMA(&hadc1, (uint32_t *)PT100Adc , PT100_ADC_BUFFOR_SIZE);
+  AccInit(&hi2c1);
   /* USER CODE END 2 */
 
   /* Init code for STM32_WPAN */

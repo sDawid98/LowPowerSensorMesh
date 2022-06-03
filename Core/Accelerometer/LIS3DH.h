@@ -33,7 +33,7 @@
 #define LIS3DH_REG_CTRL4_HR_ON 			0x08
 
 #define ACC_I2C_ADDRESS 				0x18
-#define ACC_I2C								//if SPI is used change this define to ,,ACC_SPI"
+#define ACC_I2C								 //if SPI is used change this define to ,,ACC_SPI"
 
 #define LIS3DH_BDU_ENABLED				(1 << 7)
 #define LIS3DH_HR_ENABLED				(1 << 3)
