@@ -74,8 +74,8 @@ void PT100CalibRoutine(void)
 		HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_SET); //turn on LED to give feedback button was pressed
 	TempSensor.Adc100 = TempSensor.AdcAverage;
 
-//	CalculateCoeffA();
-//	CalculateCoeffB();
+	CalculateCoeffA();
+	CalculateCoeffB();
 
 	SaveCeoffToFlashMem();
 
