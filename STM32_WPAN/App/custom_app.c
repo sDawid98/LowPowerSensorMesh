@@ -90,17 +90,6 @@ void SystemInitialize(void)
 {
 	HAL_ADC_Start_DMA(&hadc1, (uint32_t *)PT100AdcBuffor , PT100_ADC_BUFFOR_SIZE);
 	AccInit(&hi2c1);
-
-//	PT100CalibRoutine();
-
-	uint64_t a = 0x12345678;
-	uint32_t b = 0;
-
-	ee_format(0);
-	ee_write(0, 1, &a);
-
-	ee_read(0, 4, &b);
-
 }
 void myTask(void)
 {

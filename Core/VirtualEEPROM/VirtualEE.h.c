@@ -1,4 +1,4 @@
-#include "ee.h"
+#include "VirtualEE.h"
 #include <string.h>
 #include "stm32wbxx_hal_flash_ex.h"
 
@@ -9,7 +9,7 @@
 #define   _EE_ADDR_INUSE     	(uint32_t)0x08020000
 
 
-bool ee_format(bool keepRamData)
+bool ee_format(void)
 {
 	uint32_t error;
 	HAL_FLASH_Unlock();

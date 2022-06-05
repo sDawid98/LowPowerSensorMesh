@@ -12,7 +12,7 @@
 
 //################################################################################################################
 bool      ee_init(void);
-bool      ee_format(bool keepRamData);
+bool      ee_format(void);
 bool      ee_read(uint32_t startVirtualAddress, uint32_t len, uint8_t* data);
 bool      ee_write(uint32_t startVirtualAddress, uint32_t len, uint8_t* data);
 bool      ee_writeToRam(uint32_t startVirtualAddress, uint32_t len, uint8_t* data); //  only use when _EE_USE_RAM_BYTE is enabled

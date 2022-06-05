@@ -19,8 +19,8 @@ typedef struct
 {
 	uint16_t Adc100;
 	uint16_t Adc0;
-	float CeoeffA;
-	float CeoeffB;
+	float CoeffA;
+	float CoeffB;
 
 	uint16_t AdcAverage;
 	float Temperature;
