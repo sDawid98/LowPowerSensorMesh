@@ -13,6 +13,8 @@
 #define PT100_CALIB_TEMP_100_DEGREES 	100
 #define PT100_CALIB_TEMP_0_DEGREES		0
 
+#define PT100_CALIB_DONE 				1
+
 extern uint16_t PT100AdcBuffor[PT100_ADC_BUFFOR_SIZE];
 
 typedef struct
@@ -33,5 +35,7 @@ void CalculateCeoffB(void);
 void GetAverageAdcMeas(void);
 void CalculateTemperature(void);
 void PT100CalibRoutine(void);
+
+void PT100Init(void);
 
 #endif /* TEMPERATURESENSOR_PT100_H_ */

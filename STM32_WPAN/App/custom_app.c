@@ -90,6 +90,8 @@ void SystemInitialize(void)
 {
 	HAL_ADC_Start_DMA(&hadc1, (uint32_t *)PT100AdcBuffor , PT100_ADC_BUFFOR_SIZE);
 	AccInit(&hi2c1);
+
+	PT100Init();
 }
 void myTask(void)
 {

@@ -34,13 +34,15 @@ void GetAverageAdcMeas(void)
 void SaveCeoffToFlashMem(void)
 {
 	float CoeffToSave[2];
+	uint32_t CalibDoneFlag = PT100_CALIB_DONE;
 
 	CoeffToSave[0] = TempSensor.CoeffA;
 	CoeffToSave[1] = TempSensor.CoeffB;
 
+
 	ee_format();
 	ee_write(0, 1, &CoeffToSave);
-
+	ee_write(8, 1, &CalibDoneFlag);
 }
 void ReadCeoffFromFlashMem(void)
 {
@@ -52,11 +54,6 @@ void ReadCeoffFromFlashMem(void)
 
 	TempSensor.CoeffA = TempCoefA;
 	TempSensor.CoeffB = TempCoefB;
-
-}
-void CalculateTemperature(void)
-{
-	TempSensor.Temperature = (TempSensor.CoeffA*TempSensor.AdcAverage) + TempSensor.CoeffB;
 }
 /*
  Put PT100 probe to 0 Celsius degress, wait till it obtain temperature saturation, then push button1.
@@ -66,6 +63,7 @@ void CalculateTemperature(void)
  */
 void PT100CalibRoutine(void)
 {
+
 	while(HAL_GPIO_ReadPin(B1_GPIO_Port, B1_Pin)); //wait till user pushes the button when PT100 sensor is in 0 Celsius degrees
 
 	HAL_GPIO_WritePin(LD1_GPIO_Port, LD1_Pin, GPIO_PIN_SET); //turn on LED to give feedback button was pressed
@@ -76,8 +74,25 @@ void PT100CalibRoutine(void)
 		HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_SET); //turn on LED to give feedback button was pressed
 	TempSensor.Adc100 = TempSensor.AdcAverage;
 
-	CalculateCoeffA();
-	CalculateCoeffB();
+//	CalculateCoeffA();
+//	CalculateCoeffB();
 
+	SaveCeoffToFlashMem();
+
+}
+void PT100Init(void)
+{
+	uint32_t IsCalibDone = 0;
+
+	ee_read(8, 1, &IsCalibDone);
+
+	if(IsCalibDone != PT100_CALIB_DONE)
+		PT100CalibRoutine();
+	else
+		ReadCeoffFromFlashMem();
+}
+void CalculateTemperature(void)
+{
+	TempSensor.Temperature = (TempSensor.CoeffA*TempSensor.AdcAverage) + TempSensor.CoeffB;
 }
 
