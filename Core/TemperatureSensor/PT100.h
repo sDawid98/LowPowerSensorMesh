@@ -32,5 +32,6 @@ void CalculateCeoffA(void);
 void CalculateCeoffB(void);
 void GetAverageAdcMeas(void);
 void CalculateTemperature(void);
+void PT100CalibRoutine(void);
 
 #endif /* TEMPERATURESENSOR_PT100_H_ */

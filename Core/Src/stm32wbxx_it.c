@@ -56,7 +56,6 @@
 
 /* External variables --------------------------------------------------------*/
 extern DMA_HandleTypeDef hdma_adc1;
-extern ADC_HandleTypeDef hadc1;
 extern IPCC_HandleTypeDef hipcc;
 extern RTC_HandleTypeDef hrtc;
 extern DMA_HandleTypeDef hdma_usart1_rx;
@@ -258,20 +257,6 @@ void DMA1_Channel3_IRQHandler(void)
   /* USER CODE BEGIN DMA1_Channel3_IRQn 1 */
   //TODO: add PT100 routine
   /* USER CODE END DMA1_Channel3_IRQn 1 */
-}
-
-/**
-  * @brief This function handles ADC1 global interrupt.
-  */
-void ADC1_IRQHandler(void)
-{
-  /* USER CODE BEGIN ADC1_IRQn 0 */
-
-  /* USER CODE END ADC1_IRQn 0 */
-  HAL_ADC_IRQHandler(&hadc1);
-  /* USER CODE BEGIN ADC1_IRQn 1 */
-
-  /* USER CODE END ADC1_IRQn 1 */
 }
 
 /**

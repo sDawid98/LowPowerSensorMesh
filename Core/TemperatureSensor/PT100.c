@@ -34,5 +34,19 @@ void CalculateTemperature(void)
 {
 	TempSensor.Temperature = (TempSensor.CeoeffA*TempSensor.AdcAverage) + TempSensor.CeoeffB;
 }
+void PT100CalibRoutine(void)
+{
+	while(HAL_GPIO_ReadPin(B1_GPIO_Port, B1_Pin));
+
+	HAL_GPIO_WritePin(LD1_GPIO_Port, LD1_Pin, GPIO_PIN_SET);
+
+	while(HAL_GPIO_ReadPin(B2_GPIO_Port, B2_Pin))
+
+	HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_SET);
+
+}
+
+
+
 
 
