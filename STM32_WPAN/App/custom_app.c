@@ -93,10 +93,13 @@ void SystemInitialize(void)
 
 //	PT100CalibRoutine();
 
-	uint32_t a = 0x11111111;
+	uint64_t a = 0x12345678;
+	uint32_t b = 0;
 
 	ee_format(0);
-	ee_write(0, 4, &a);
+	ee_write(0, 1, &a);
+
+	ee_read(0, 4, &b);
 
 }
 void myTask(void)
