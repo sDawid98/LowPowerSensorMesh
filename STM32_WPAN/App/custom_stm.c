@@ -29,8 +29,8 @@
 /* Private typedef -----------------------------------------------------------*/
 typedef struct{
   uint16_t  CustomTest_SvcHdle;                    /**< test_SVC handle */
-  uint16_t  CustomMy_LedHdle;                  /**< MY_LED handle */
-  uint16_t  CustomMy_ButtonHdle;                  /**< MY_BUTTON handle */
+  uint16_t  CustomTemperaturedataHdle;                  /**< TemperatureData handle */
+  uint16_t  CustomWibrationdataHdle;                  /**< WibrationData handle */
 }CustomContext_t;
 
 /* USER CODE BEGIN PTD */
@@ -60,8 +60,8 @@ typedef struct{
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
-static const uint8_t SizeMy_Led=3;
-static const uint8_t SizeMy_Button=2;
+static const uint8_t SizeTemperaturedata=4;
+static const uint8_t SizeWibrationdata=2;
 /**
  * START of Section BLE_DRIVER_CONTEXT
  */
@@ -105,9 +105,9 @@ do {\
  D973F2E1-B19E-11E2-9E96-0800200C9A66: Characteristic_1 128bits UUID
  D973F2E2-B19E-11E2-9E96-0800200C9A66: Characteristic_2 128bits UUID
  */
-#define COPY_TEST_SVC_UUID(uuid_struct)          COPY_UUID_128(uuid_struct,0x00,0x00,0xfe,0x40,0xcc,0x7a,0x48,0x2a,0x98,0x4a,0x7f,0x2e,0xd5,0xb3,0xe5,0x8f)
-#define COPY_MY_LED_UUID(uuid_struct)    COPY_UUID_128(uuid_struct,0x00,0x00,0x2a,0x1c,0x8e,0x22,0x45,0x41,0x9d,0x4c,0x21,0xed,0xae,0x82,0xed,0x19)
-#define COPY_MY_BUTTON_UUID(uuid_struct)    COPY_UUID_128(uuid_struct,0x00,0x00,0xfe,0x42,0x8e,0x22,0x45,0x41,0x9d,0x4c,0x21,0xed,0xae,0x82,0xed,0x19)
+#define COPY_TEST_SVC_UUID(uuid_struct)          COPY_UUID_128(uuid_struct,0x00,0x00,0x00,0x01,0xcc,0x7a,0x48,0x2a,0x98,0x4a,0x7f,0x2e,0xd5,0xb3,0xe5,0x8f)
+#define COPY_TEMPERATUREDATA_UUID(uuid_struct)    COPY_UUID_128(uuid_struct,0x00,0x00,0x21,0x01,0x8e,0x22,0x45,0x41,0x9d,0x4c,0x21,0xed,0xae,0x82,0xed,0x19)
+#define COPY_WIBRATIONDATA_UUID(uuid_struct)    COPY_UUID_128(uuid_struct,0x00,0x00,0x21,0x02,0x8e,0x22,0x45,0x41,0x9d,0x4c,0x21,0xed,0xae,0x82,0xed,0x19)
 
 /* USER CODE BEGIN PF */
 
@@ -143,7 +143,7 @@ static SVCCTL_EvtAckStatus_t Custom_STM_Event_Handler(void *Event)
 
           /* USER CODE END EVT_BLUE_GATT_ATTRIBUTE_MODIFIED_BEGIN */
           attribute_modified = (aci_gatt_attribute_modified_event_rp0*)blecore_evt->data;
-          if(attribute_modified->Attr_Handle == (CustomContext.CustomMy_ButtonHdle + CHARACTERISTIC_DESCRIPTOR_ATTRIBUTE_OFFSET))
+          if(attribute_modified->Attr_Handle == (CustomContext.CustomWibrationdataHdle + CHARACTERISTIC_DESCRIPTOR_ATTRIBUTE_OFFSET))
           {
             return_value = SVCCTL_EvtAckFlowEnable;
             /* USER CODE BEGIN CUSTOM_STM_Service_1_Char_2 */
@@ -160,7 +160,7 @@ static SVCCTL_EvtAckStatus_t Custom_STM_Event_Handler(void *Event)
                 /* USER CODE BEGIN CUSTOM_STM_Service_1_Char_2_Disabled_BEGIN */
 
                 /* USER CODE END CUSTOM_STM_Service_1_Char_2_Disabled_BEGIN */
-                Notification.Custom_Evt_Opcode = CUSTOM_STM_MY_BUTTON_NOTIFY_DISABLED_EVT;
+                Notification.Custom_Evt_Opcode = CUSTOM_STM_WIBRATIONDATA_NOTIFY_DISABLED_EVT;
                 Custom_STM_App_Notification(&Notification);
                 /* USER CODE BEGIN CUSTOM_STM_Service_1_Char_2_Disabled_END */
 
@@ -172,7 +172,7 @@ static SVCCTL_EvtAckStatus_t Custom_STM_Event_Handler(void *Event)
                 /* USER CODE BEGIN CUSTOM_STM_Service_1_Char_2_COMSVC_Notification_BEGIN */
 
                 /* USER CODE END CUSTOM_STM_Service_1_Char_2_COMSVC_Notification_BEGIN */
-                Notification.Custom_Evt_Opcode = CUSTOM_STM_MY_BUTTON_NOTIFY_ENABLED_EVT;
+                Notification.Custom_Evt_Opcode = CUSTOM_STM_WIBRATIONDATA_NOTIFY_ENABLED_EVT;
                 Custom_STM_App_Notification(&Notification);
                 /* USER CODE BEGIN CUSTOM_STM_Service_1_Char_2_COMSVC_Notification_END */
 
@@ -185,15 +185,15 @@ static SVCCTL_EvtAckStatus_t Custom_STM_Event_Handler(void *Event)
                 /* USER CODE END CUSTOM_STM_Service_1_Char_2_default */
               break;
             }
-          }  /* if(attribute_modified->Attr_Handle == (CustomContext.CustomMy_ButtonHdle + CHARACTERISTIC_DESCRIPTOR_ATTRIBUTE_OFFSET))*/
+          }  /* if(attribute_modified->Attr_Handle == (CustomContext.CustomWibrationdataHdle + CHARACTERISTIC_DESCRIPTOR_ATTRIBUTE_OFFSET))*/
 
-          else if(attribute_modified->Attr_Handle == (CustomContext.CustomMy_LedHdle + CHARACTERISTIC_VALUE_ATTRIBUTE_OFFSET))
+          else if(attribute_modified->Attr_Handle == (CustomContext.CustomTemperaturedataHdle + CHARACTERISTIC_VALUE_ATTRIBUTE_OFFSET))
           {
             return_value = SVCCTL_EvtAckFlowEnable;
             /* USER CODE BEGIN CUSTOM_STM_Service_1_Char_1_ACI_GATT_ATTRIBUTE_MODIFIED_VSEVT_CODE */
             HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
             /* USER CODE END CUSTOM_STM_Service_1_Char_1_ACI_GATT_ATTRIBUTE_MODIFIED_VSEVT_CODE */
-          } /* if(attribute_modified->Attr_Handle == (CustomContext.CustomMy_LedHdle + CHARACTERISTIC_VALUE_ATTRIBUTE_OFFSET))*/
+          } /* if(attribute_modified->Attr_Handle == (CustomContext.CustomTemperaturedataHdle + CHARACTERISTIC_VALUE_ATTRIBUTE_OFFSET))*/
           /* USER CODE BEGIN EVT_BLUE_GATT_ATTRIBUTE_MODIFIED_END */
 
           /* USER CODE END EVT_BLUE_GATT_ATTRIBUTE_MODIFIED_END */
@@ -273,9 +273,9 @@ void SVCCTL_InitCustomSvc(void)
    *
    * Max_Attribute_Records = 1 + 2*2 + 1*no_of_char_with_notify_or_indicate_property + 1*no_of_char_with_broadcast_property
    * service_max_attribute_record = 1 for test_SVC +
-   *                                2 for MY_LED +
-   *                                2 for MY_BUTTON +
-   *                                1 for MY_BUTTON configuration descriptor +
+   *                                2 for TemperatureData +
+   *                                2 for WibrationData +
+   *                                1 for WibrationData configuration descriptor +
    *                              = 6
    */
 
@@ -287,31 +287,31 @@ void SVCCTL_InitCustomSvc(void)
                        &(CustomContext.CustomTest_SvcHdle));
 
   /**
-   *  MY_LED
+   *  TemperatureData
    */
-  COPY_MY_LED_UUID(uuid.Char_UUID_128);
+  COPY_TEMPERATUREDATA_UUID(uuid.Char_UUID_128);
   aci_gatt_add_char(CustomContext.CustomTest_SvcHdle,
                     UUID_TYPE_128, &uuid,
-                    SizeMy_Led,
+                    SizeTemperaturedata,
                     CHAR_PROP_WRITE,
                     ATTR_PERMISSION_NONE,
                     GATT_NOTIFY_ATTRIBUTE_WRITE,
                     0x10,
                     CHAR_VALUE_LEN_CONSTANT,
-                    &(CustomContext.CustomMy_LedHdle));
+                    &(CustomContext.CustomTemperaturedataHdle));
   /**
-   *  MY_BUTTON
+   *  WibrationData
    */
-  COPY_MY_BUTTON_UUID(uuid.Char_UUID_128);
+  COPY_WIBRATIONDATA_UUID(uuid.Char_UUID_128);
   aci_gatt_add_char(CustomContext.CustomTest_SvcHdle,
                     UUID_TYPE_128, &uuid,
-                    SizeMy_Button,
+                    SizeWibrationdata,
                     CHAR_PROP_NOTIFY,
                     ATTR_PERMISSION_NONE,
                     GATT_NOTIFY_ATTRIBUTE_WRITE | GATT_NOTIFY_WRITE_REQ_AND_WAIT_FOR_APPL_RESP | GATT_NOTIFY_READ_REQ_AND_WAIT_FOR_APPL_RESP,
                     0x10,
                     CHAR_VALUE_LEN_CONSTANT,
-                    &(CustomContext.CustomMy_ButtonHdle));
+                    &(CustomContext.CustomWibrationdataHdle));
 
   /* USER CODE BEGIN SVCCTL_InitCustomSvc_2 */
 
@@ -336,22 +336,22 @@ tBleStatus Custom_STM_App_Update_Char(Custom_STM_Char_Opcode_t CharOpcode, uint8
   switch(CharOpcode)
   {
 
-    case CUSTOM_STM_MY_LED:
+    case CUSTOM_STM_TEMPERATUREDATA:
       result = aci_gatt_update_char_value(CustomContext.CustomTest_SvcHdle,
-                                          CustomContext.CustomMy_LedHdle,
+                                          CustomContext.CustomTemperaturedataHdle,
                                           0, /* charValOffset */
-                                          SizeMy_Led, /* charValueLen */
+                                          SizeTemperaturedata, /* charValueLen */
                                           (uint8_t *)  pPayload);
       /* USER CODE BEGIN CUSTOM_STM_Service_1_Char_1*/
 
       /* USER CODE END CUSTOM_STM_Service_1_Char_1*/
       break;
 
-    case CUSTOM_STM_MY_BUTTON:
+    case CUSTOM_STM_WIBRATIONDATA:
       result = aci_gatt_update_char_value(CustomContext.CustomTest_SvcHdle,
-                                          CustomContext.CustomMy_ButtonHdle,
+                                          CustomContext.CustomWibrationdataHdle,
                                           0, /* charValOffset */
-                                          SizeMy_Button, /* charValueLen */
+                                          SizeWibrationdata, /* charValueLen */
                                           (uint8_t *)  pPayload);
       /* USER CODE BEGIN CUSTOM_STM_Service_1_Char_2*/
 
