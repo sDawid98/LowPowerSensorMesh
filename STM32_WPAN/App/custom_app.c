@@ -38,14 +38,13 @@
 /* Private typedef -----------------------------------------------------------*/
 typedef struct
 {
-	/* test_SVC */
-	uint8_t               Temperaturedata_Notification_Status;
-	uint8_t               Wibrationdata_Notification_Status;
-	/* USER CODE BEGIN CUSTOM_APP_Context_t */
+  /* test_SVC */
+  uint8_t               Wibrationdata_Notification_Status;
+  /* USER CODE BEGIN CUSTOM_APP_Context_t */
 
-	/* USER CODE END CUSTOM_APP_Context_t */
+  /* USER CODE END CUSTOM_APP_Context_t */
 
-	uint16_t              ConnectionHandle;
+  uint16_t              ConnectionHandle;
 } Custom_App_Context_t;
 
 /* USER CODE BEGIN PTD */
@@ -77,15 +76,10 @@ PLACE_IN_SECTION("BLE_APP_CONTEXT") static Custom_App_Context_t Custom_App_Conte
 uint8_t UpdateCharData[247];
 uint8_t NotifyCharData[247];
 
-uint8_t SecureReadData;
-uint32_t ToSendTimer;
-uint32_t ToSendTimer2;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
-/* test_SVC */
-static void Custom_Temperaturedata_Update_Char(void);
-static void Custom_Temperaturedata_Send_Notification(void);
+  /* test_SVC */
 static void Custom_Wibrationdata_Update_Char(void);
 static void Custom_Wibrationdata_Send_Notification(void);
 
@@ -99,10 +93,11 @@ void SystemInitialize(void)
 }
 void myTask(void)
 {
+	static uint32_t ToSendTimer, ToSendTimer2;
 	static uint16_t test,test2 = 0;
 
 	test = 0x1111;
-	test2 =0x2222;
+
 
 	UpdateCharData[0] = test >> 8;
 	UpdateCharData[1] = test;
@@ -110,14 +105,18 @@ void myTask(void)
 	UpdateCharData[2] = test2 >> 8;
 	UpdateCharData[3] = test2;
 
-	if(HAL_GetTick() - ToSendTimer > 2000)
-	{
-		ToSendTimer = HAL_GetTick();
-		Custom_Temperaturedata_Update_Char();
-	}
+
+	Custom_STM_App_Update_Char(CUSTOM_STM_TEMPERATUREDATA, (uint8_t *)UpdateCharData);
+
+//	if(HAL_GetTick() - ToSendTimer > 2000)
+//	{
+//		ToSendTimer = HAL_GetTick();
+////		Custom_Temperaturedata_Update_Char();
+//	}
 	if(HAL_GetTick() - ToSendTimer2 > 4000)
 	{
 		ToSendTimer2 = HAL_GetTick();
+		test2 += 0x1;
 		Custom_Wibrationdata_Update_Char();
 	}
 
@@ -140,95 +139,95 @@ void AccelerometerTask(void)
 /* Functions Definition ------------------------------------------------------*/
 void Custom_STM_App_Notification(Custom_STM_App_Notification_evt_t *pNotification)
 {
-	/* USER CODE BEGIN CUSTOM_STM_App_Notification_1 */
+  /* USER CODE BEGIN CUSTOM_STM_App_Notification_1 */
 
-	/* USER CODE END CUSTOM_STM_App_Notification_1 */
-	switch(pNotification->Custom_Evt_Opcode)
-	{
-	/* USER CODE BEGIN CUSTOM_STM_App_Notification_Custom_Evt_Opcode */
+  /* USER CODE END CUSTOM_STM_App_Notification_1 */
+  switch(pNotification->Custom_Evt_Opcode)
+  {
+    /* USER CODE BEGIN CUSTOM_STM_App_Notification_Custom_Evt_Opcode */
 
-	/* USER CODE END CUSTOM_STM_App_Notification_Custom_Evt_Opcode */
+    /* USER CODE END CUSTOM_STM_App_Notification_Custom_Evt_Opcode */
 
-	/* test_SVC */
-	case CUSTOM_STM_TEMPERATUREDATA_NOTIFY_ENABLED_EVT:
-		/* USER CODE BEGIN CUSTOM_STM_TEMPERATUREDATA_NOTIFY_ENABLED_EVT */
+  /* test_SVC */
+    case CUSTOM_STM_TEMPERATUREDATA_READ_EVT:
+      /* USER CODE BEGIN CUSTOM_STM_TEMPERATUREDATA_READ_EVT */
 
-		/* USER CODE END CUSTOM_STM_TEMPERATUREDATA_NOTIFY_ENABLED_EVT */
-		break;
+      /* USER CODE END CUSTOM_STM_TEMPERATUREDATA_READ_EVT */
+      break;
 
-	case CUSTOM_STM_TEMPERATUREDATA_NOTIFY_DISABLED_EVT:
-		/* USER CODE BEGIN CUSTOM_STM_TEMPERATUREDATA_NOTIFY_DISABLED_EVT */
+    case CUSTOM_STM_WIBRATIONDATA_READ_EVT:
+      /* USER CODE BEGIN CUSTOM_STM_WIBRATIONDATA_READ_EVT */
 
-		/* USER CODE END CUSTOM_STM_TEMPERATUREDATA_NOTIFY_DISABLED_EVT */
-		break;
+      /* USER CODE END CUSTOM_STM_WIBRATIONDATA_READ_EVT */
+      break;
 
-	case CUSTOM_STM_WIBRATIONDATA_NOTIFY_ENABLED_EVT:
-		/* USER CODE BEGIN CUSTOM_STM_WIBRATIONDATA_NOTIFY_ENABLED_EVT */
+    case CUSTOM_STM_WIBRATIONDATA_NOTIFY_ENABLED_EVT:
+      /* USER CODE BEGIN CUSTOM_STM_WIBRATIONDATA_NOTIFY_ENABLED_EVT */
 
-		/* USER CODE END CUSTOM_STM_WIBRATIONDATA_NOTIFY_ENABLED_EVT */
-		break;
+      /* USER CODE END CUSTOM_STM_WIBRATIONDATA_NOTIFY_ENABLED_EVT */
+      break;
 
-	case CUSTOM_STM_WIBRATIONDATA_NOTIFY_DISABLED_EVT:
-		/* USER CODE BEGIN CUSTOM_STM_WIBRATIONDATA_NOTIFY_DISABLED_EVT */
+    case CUSTOM_STM_WIBRATIONDATA_NOTIFY_DISABLED_EVT:
+      /* USER CODE BEGIN CUSTOM_STM_WIBRATIONDATA_NOTIFY_DISABLED_EVT */
 
-		/* USER CODE END CUSTOM_STM_WIBRATIONDATA_NOTIFY_DISABLED_EVT */
-		break;
+      /* USER CODE END CUSTOM_STM_WIBRATIONDATA_NOTIFY_DISABLED_EVT */
+      break;
 
-	default:
-		/* USER CODE BEGIN CUSTOM_STM_App_Notification_default */
+    default:
+      /* USER CODE BEGIN CUSTOM_STM_App_Notification_default */
 
-		/* USER CODE END CUSTOM_STM_App_Notification_default */
-		break;
-	}
-	/* USER CODE BEGIN CUSTOM_STM_App_Notification_2 */
+      /* USER CODE END CUSTOM_STM_App_Notification_default */
+      break;
+  }
+  /* USER CODE BEGIN CUSTOM_STM_App_Notification_2 */
 
-	/* USER CODE END CUSTOM_STM_App_Notification_2 */
-	return;
+  /* USER CODE END CUSTOM_STM_App_Notification_2 */
+  return;
 }
 
 void Custom_APP_Notification(Custom_App_ConnHandle_Not_evt_t *pNotification)
 {
-	/* USER CODE BEGIN CUSTOM_APP_Notification_1 */
+  /* USER CODE BEGIN CUSTOM_APP_Notification_1 */
 
-	/* USER CODE END CUSTOM_APP_Notification_1 */
+  /* USER CODE END CUSTOM_APP_Notification_1 */
 
-	switch(pNotification->Custom_Evt_Opcode)
-	{
-	/* USER CODE BEGIN CUSTOM_APP_Notification_Custom_Evt_Opcode */
+  switch(pNotification->Custom_Evt_Opcode)
+  {
+    /* USER CODE BEGIN CUSTOM_APP_Notification_Custom_Evt_Opcode */
 
-	/* USER CODE END P2PS_CUSTOM_Notification_Custom_Evt_Opcode */
-	case CUSTOM_CONN_HANDLE_EVT :
-		/* USER CODE BEGIN CUSTOM_CONN_HANDLE_EVT */
+    /* USER CODE END P2PS_CUSTOM_Notification_Custom_Evt_Opcode */
+    case CUSTOM_CONN_HANDLE_EVT :
+      /* USER CODE BEGIN CUSTOM_CONN_HANDLE_EVT */
 
-		/* USER CODE END CUSTOM_CONN_HANDLE_EVT */
-		break;
+      /* USER CODE END CUSTOM_CONN_HANDLE_EVT */
+      break;
 
-	case CUSTOM_DISCON_HANDLE_EVT :
-		/* USER CODE BEGIN CUSTOM_DISCON_HANDLE_EVT */
+    case CUSTOM_DISCON_HANDLE_EVT :
+      /* USER CODE BEGIN CUSTOM_DISCON_HANDLE_EVT */
 
-		/* USER CODE END CUSTOM_DISCON_HANDLE_EVT */
-		break;
+      /* USER CODE END CUSTOM_DISCON_HANDLE_EVT */
+      break;
 
-	default:
-		/* USER CODE BEGIN CUSTOM_APP_Notification_default */
+    default:
+      /* USER CODE BEGIN CUSTOM_APP_Notification_default */
 
-		/* USER CODE END CUSTOM_APP_Notification_default */
-		break;
-	}
+      /* USER CODE END CUSTOM_APP_Notification_default */
+      break;
+  }
 
-	/* USER CODE BEGIN CUSTOM_APP_Notification_2 */
+  /* USER CODE BEGIN CUSTOM_APP_Notification_2 */
 
-	/* USER CODE END CUSTOM_APP_Notification_2 */
+  /* USER CODE END CUSTOM_APP_Notification_2 */
 
-	return;
+  return;
 }
 
 void Custom_APP_Init(void)
 {
-	/* USER CODE BEGIN CUSTOM_APP_Init */
+  /* USER CODE BEGIN CUSTOM_APP_Init */
 
-	/* USER CODE END CUSTOM_APP_Init */
-	return;
+  /* USER CODE END CUSTOM_APP_Init */
+  return;
 }
 
 /* USER CODE BEGIN FD */
@@ -241,55 +240,30 @@ void Custom_APP_Init(void)
  *
  *************************************************************/
 
-/* test_SVC */
-void Custom_Temperaturedata_Update_Char(void) /* Property Read */
-{
-	Custom_STM_App_Update_Char(CUSTOM_STM_TEMPERATUREDATA, (UpdateCharData+2));
-	/* USER CODE BEGIN Temperaturedata_UC*/
-	//TODO:remember after generating the code to add ,,+2" to UpdateCharData
-	/* USER CODE END Temperaturedata_UC*/
-	return;
-}
-
-void Custom_Temperaturedata_Send_Notification(void) /* Property Notification */
-{
-	if(Custom_App_Context.Temperaturedata_Notification_Status)
-	{
-		Custom_STM_App_Update_Char(CUSTOM_STM_TEMPERATUREDATA, (uint8_t *)NotifyCharData);
-		/* USER CODE BEGIN Temperaturedata_NS*/
-
-		/* USER CODE END Temperaturedata_NS*/
-	}
-	else
-	{
-		APP_DBG_MSG("-- CUSTOM APPLICATION : CAN'T INFORM CLIENT -  NOTIFICATION DISABLED\n ");
-	}
-	return;
-}
-
+  /* test_SVC */
 void Custom_Wibrationdata_Update_Char(void) /* Property Read */
 {
-	Custom_STM_App_Update_Char(CUSTOM_STM_WIBRATIONDATA, (uint8_t *)UpdateCharData);
-	/* USER CODE BEGIN Wibrationdata_UC*/
-
-	/* USER CODE END Wibrationdata_UC*/
-	return;
+  Custom_STM_App_Update_Char(CUSTOM_STM_WIBRATIONDATA, (uint8_t *)UpdateCharData+2);
+  /* USER CODE BEGIN Wibrationdata_UC*/
+	//TODO:remember after generating the code to add ,,+2" to UpdateCharData
+  /* USER CODE END Wibrationdata_UC*/
+  return;
 }
 
 void Custom_Wibrationdata_Send_Notification(void) /* Property Notification */
-{
-	if(Custom_App_Context.Wibrationdata_Notification_Status)
-	{
-		Custom_STM_App_Update_Char(CUSTOM_STM_WIBRATIONDATA, (uint8_t *)NotifyCharData);
-		/* USER CODE BEGIN Wibrationdata_NS*/
+ {
+  if(Custom_App_Context.Wibrationdata_Notification_Status)
+  {
+    Custom_STM_App_Update_Char(CUSTOM_STM_WIBRATIONDATA, (uint8_t *)NotifyCharData);
+    /* USER CODE BEGIN Wibrationdata_NS*/
 
-		/* USER CODE END Wibrationdata_NS*/
-	}
-	else
-	{
-		APP_DBG_MSG("-- CUSTOM APPLICATION : CAN'T INFORM CLIENT -  NOTIFICATION DISABLED\n ");
-	}
-	return;
+    /* USER CODE END Wibrationdata_NS*/
+  }
+  else
+  {
+    APP_DBG_MSG("-- CUSTOM APPLICATION : CAN'T INFORM CLIENT -  NOTIFICATION DISABLED\n ");
+  }
+  return;
 }
 
 /* USER CODE BEGIN FD_LOCAL_FUNCTIONS*/
