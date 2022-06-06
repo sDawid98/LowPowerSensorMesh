@@ -94,31 +94,29 @@ void SystemInitialize(void)
 void myTask(void)
 {
 	static uint32_t ToSendTimer, ToSendTimer2;
-	static uint16_t test,test2 = 0;
+	//	static int test,test2 = 0;
 
-	test = 0x1111;
+	//	UpdateCharData[0] = test >> 8;
+	//	UpdateCharData[1] = test;
+	//
+	//	UpdateCharData[2] = test2 >> 8;
+	//	UpdateCharData[3] = test2;
+	UpdateCharData[0] = 1;
+	UpdateCharData[1] = 2;
 
-
-	UpdateCharData[0] = test >> 8;
-	UpdateCharData[1] = test;
-
-	UpdateCharData[2] = test2 >> 8;
-	UpdateCharData[3] = test2;
-
-
-	Custom_STM_App_Update_Char(CUSTOM_STM_TEMPERATUREDATA, (uint8_t *)UpdateCharData);
-
-//	if(HAL_GetTick() - ToSendTimer > 2000)
-//	{
-//		ToSendTimer = HAL_GetTick();
-////		Custom_Temperaturedata_Update_Char();
-//	}
-	if(HAL_GetTick() - ToSendTimer2 > 4000)
+	if(HAL_GetTick() - ToSendTimer > 500)
 	{
-		ToSendTimer2 = HAL_GetTick();
-		test2 += 0x1;
-		Custom_Wibrationdata_Update_Char();
+		ToSendTimer = HAL_GetTick();
+		UpdateCharData[0]++;
+		Custom_STM_App_Update_Char(CUSTOM_STM_TEMPERATUREDATA, (uint8_t *)UpdateCharData);
 	}
+	if(HAL_GetTick() - ToSendTimer2 > 1000)
+	{
+		NotifyCharData[1]++;
+		ToSendTimer2 = HAL_GetTick();
+		Custom_Wibrationdata_Send_Notification();
+	}
+
 
 	UTIL_SEQ_SetTask(1 << CFG_TASK_MY_TASK, CFG_SCH_PRIO_0);
 }
@@ -243,9 +241,9 @@ void Custom_APP_Init(void)
   /* test_SVC */
 void Custom_Wibrationdata_Update_Char(void) /* Property Read */
 {
-  Custom_STM_App_Update_Char(CUSTOM_STM_WIBRATIONDATA, (uint8_t *)UpdateCharData+2);
+  Custom_STM_App_Update_Char(CUSTOM_STM_WIBRATIONDATA, (uint8_t *)UpdateCharData);
   /* USER CODE BEGIN Wibrationdata_UC*/
-	//TODO:remember after generating the code to add ,,+2" to UpdateCharData
+
   /* USER CODE END Wibrationdata_UC*/
   return;
 }
@@ -254,7 +252,7 @@ void Custom_Wibrationdata_Send_Notification(void) /* Property Notification */
  {
   if(Custom_App_Context.Wibrationdata_Notification_Status)
   {
-    Custom_STM_App_Update_Char(CUSTOM_STM_WIBRATIONDATA, (uint8_t *)NotifyCharData);
+    Custom_STM_App_Update_Char(CUSTOM_STM_WIBRATIONDATA, (uint8_t *)NotifyCharData+1);
     /* USER CODE BEGIN Wibrationdata_NS*/
 
     /* USER CODE END Wibrationdata_NS*/

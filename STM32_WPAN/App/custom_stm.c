@@ -60,8 +60,8 @@ typedef struct{
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
-static const uint8_t SizeTemperaturedata=2;
-static const uint8_t SizeWibrationdata=2;
+static const uint8_t SizeTemperaturedata=1;
+static const uint8_t SizeWibrationdata=1;
 /**
  * START of Section BLE_DRIVER_CONTEXT
  */
