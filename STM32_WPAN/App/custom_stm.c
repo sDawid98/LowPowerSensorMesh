@@ -60,7 +60,7 @@ typedef struct{
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
-static const uint8_t SizeTemperaturedata=4;
+static const uint8_t SizeTemperaturedata=2;
 static const uint8_t SizeWibrationdata=2;
 /**
  * START of Section BLE_DRIVER_CONTEXT
@@ -143,7 +143,51 @@ static SVCCTL_EvtAckStatus_t Custom_STM_Event_Handler(void *Event)
 
           /* USER CODE END EVT_BLUE_GATT_ATTRIBUTE_MODIFIED_BEGIN */
           attribute_modified = (aci_gatt_attribute_modified_event_rp0*)blecore_evt->data;
-          if(attribute_modified->Attr_Handle == (CustomContext.CustomWibrationdataHdle + CHARACTERISTIC_DESCRIPTOR_ATTRIBUTE_OFFSET))
+          if(attribute_modified->Attr_Handle == (CustomContext.CustomTemperaturedataHdle + CHARACTERISTIC_DESCRIPTOR_ATTRIBUTE_OFFSET))
+          {
+            return_value = SVCCTL_EvtAckFlowEnable;
+            /* USER CODE BEGIN CUSTOM_STM_Service_1_Char_1 */
+
+            /* USER CODE END CUSTOM_STM_Service_1_Char_1 */
+            switch(attribute_modified->Attr_Data[0])
+            {
+              /* USER CODE BEGIN CUSTOM_STM_Service_1_Char_1_attribute_modified */
+
+              /* USER CODE END CUSTOM_STM_Service_1_Char_1_attribute_modified */
+
+              /* Disabled Notification management */
+              case (!(COMSVC_Notification)):
+                /* USER CODE BEGIN CUSTOM_STM_Service_1_Char_1_Disabled_BEGIN */
+
+                /* USER CODE END CUSTOM_STM_Service_1_Char_1_Disabled_BEGIN */
+                Notification.Custom_Evt_Opcode = CUSTOM_STM_TEMPERATUREDATA_NOTIFY_DISABLED_EVT;
+                Custom_STM_App_Notification(&Notification);
+                /* USER CODE BEGIN CUSTOM_STM_Service_1_Char_1_Disabled_END */
+
+                /* USER CODE END CUSTOM_STM_Service_1_Char_1_Disabled_END */
+                break;
+
+              /* Enabled Notification management */
+              case COMSVC_Notification:
+                /* USER CODE BEGIN CUSTOM_STM_Service_1_Char_1_COMSVC_Notification_BEGIN */
+
+                /* USER CODE END CUSTOM_STM_Service_1_Char_1_COMSVC_Notification_BEGIN */
+                Notification.Custom_Evt_Opcode = CUSTOM_STM_TEMPERATUREDATA_NOTIFY_ENABLED_EVT;
+                Custom_STM_App_Notification(&Notification);
+                /* USER CODE BEGIN CUSTOM_STM_Service_1_Char_1_COMSVC_Notification_END */
+
+                /* USER CODE END CUSTOM_STM_Service_1_Char_1_COMSVC_Notification_END */
+                break;
+
+              default:
+                /* USER CODE BEGIN CUSTOM_STM_Service_1_Char_1_default */
+
+                /* USER CODE END CUSTOM_STM_Service_1_Char_1_default */
+              break;
+            }
+          }  /* if(attribute_modified->Attr_Handle == (CustomContext.CustomTemperaturedataHdle + CHARACTERISTIC_DESCRIPTOR_ATTRIBUTE_OFFSET))*/
+
+          else if(attribute_modified->Attr_Handle == (CustomContext.CustomWibrationdataHdle + CHARACTERISTIC_DESCRIPTOR_ATTRIBUTE_OFFSET))
           {
             return_value = SVCCTL_EvtAckFlowEnable;
             /* USER CODE BEGIN CUSTOM_STM_Service_1_Char_2 */
@@ -187,13 +231,6 @@ static SVCCTL_EvtAckStatus_t Custom_STM_Event_Handler(void *Event)
             }
           }  /* if(attribute_modified->Attr_Handle == (CustomContext.CustomWibrationdataHdle + CHARACTERISTIC_DESCRIPTOR_ATTRIBUTE_OFFSET))*/
 
-          else if(attribute_modified->Attr_Handle == (CustomContext.CustomTemperaturedataHdle + CHARACTERISTIC_VALUE_ATTRIBUTE_OFFSET))
-          {
-            return_value = SVCCTL_EvtAckFlowEnable;
-            /* USER CODE BEGIN CUSTOM_STM_Service_1_Char_1_ACI_GATT_ATTRIBUTE_MODIFIED_VSEVT_CODE */
-            HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
-            /* USER CODE END CUSTOM_STM_Service_1_Char_1_ACI_GATT_ATTRIBUTE_MODIFIED_VSEVT_CODE */
-          } /* if(attribute_modified->Attr_Handle == (CustomContext.CustomTemperaturedataHdle + CHARACTERISTIC_VALUE_ATTRIBUTE_OFFSET))*/
           /* USER CODE BEGIN EVT_BLUE_GATT_ATTRIBUTE_MODIFIED_END */
 
           /* USER CODE END EVT_BLUE_GATT_ATTRIBUTE_MODIFIED_END */
@@ -275,15 +312,16 @@ void SVCCTL_InitCustomSvc(void)
    * service_max_attribute_record = 1 for test_SVC +
    *                                2 for TemperatureData +
    *                                2 for WibrationData +
+   *                                1 for TemperatureData configuration descriptor +
    *                                1 for WibrationData configuration descriptor +
-   *                              = 6
+   *                              = 7
    */
 
   COPY_TEST_SVC_UUID(uuid.Char_UUID_128);
   aci_gatt_add_service(UUID_TYPE_128,
                        (Service_UUID_t *) &uuid,
                        PRIMARY_SERVICE,
-                       6,
+                       7,
                        &(CustomContext.CustomTest_SvcHdle));
 
   /**
@@ -293,9 +331,9 @@ void SVCCTL_InitCustomSvc(void)
   aci_gatt_add_char(CustomContext.CustomTest_SvcHdle,
                     UUID_TYPE_128, &uuid,
                     SizeTemperaturedata,
-                    CHAR_PROP_WRITE,
+                    CHAR_PROP_NOTIFY,
                     ATTR_PERMISSION_NONE,
-                    GATT_NOTIFY_ATTRIBUTE_WRITE,
+                    GATT_NOTIFY_ATTRIBUTE_WRITE | GATT_NOTIFY_WRITE_REQ_AND_WAIT_FOR_APPL_RESP | GATT_NOTIFY_READ_REQ_AND_WAIT_FOR_APPL_RESP,
                     0x10,
                     CHAR_VALUE_LEN_CONSTANT,
                     &(CustomContext.CustomTemperaturedataHdle));
