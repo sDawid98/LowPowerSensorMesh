@@ -96,8 +96,7 @@ void SystemInitialize(void)
 }
 void SendDataBle(void)
 {
-	static uint32_t SendTempDatTim, SendAccDatTim;
-	static int16_t b = 2555;
+	static uint32_t SendTempDatTim, SendAccDatTim = 0;
 
 	if(HAL_GetTick() - SendTempDatTim > TEMP_SEND_TIME_INTERVAL)
 	{
@@ -109,7 +108,7 @@ void SendDataBle(void)
 		SendTempDatTim = HAL_GetTick();
 		Custom_Temperaturedata_Send_Notification();
 	}
-	if(HAL_GetTick() - SendAccDatTim > 200)
+	if(HAL_GetTick() - SendAccDatTim > 100)
 	{
 		CalculateMagnitude();
 
