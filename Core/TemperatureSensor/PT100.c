@@ -14,8 +14,6 @@ PT100_t TempSensor;
 
 void CalculateCoeffA(void)
 {
-	TempSensor.Adc100 = 1872;
-	TempSensor.Adc0 = 3072;
 	TempSensor.CoeffA = (PT100_CALIB_TEMP_100_DEGREES / ((float)TempSensor.Adc100 - TempSensor.Adc0));
 }
 void CalculateCoeffB(void)

@@ -33,8 +33,8 @@ typedef struct
 
 extern PT100_t TempSensor;
 
-void CalculateCeoffA(void);
-void CalculateCeoffB(void);
+void CalculateCoeffA(void);
+void CalculateCoeffB(void);
 void GetAverageAdcMeas(void);
 void PT100CalculateTemperature(void);
 void PT100CalibRoutine(void);
