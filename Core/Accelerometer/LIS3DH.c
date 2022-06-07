@@ -7,6 +7,7 @@
 
 #include "main.h"
 #include "LIS3DH.h"
+#include "math.h"
 
 Accelerometer_t Accel = {0};
 
@@ -48,7 +49,7 @@ void AccWrite(uint8_t Register, uint8_t Data)
 void AccConfiguration(void)
 {
 	AccWrite(LIS3DH_REG_CTRL1, LIS3DH_ALL_AXIS_ENABLED | LIS3DH_400_Hz_DATARATE_ENABLED); 	//400Hz =, all axis enabled
-	AccWrite(LIS3DH_REG_CTRL4, LIS3DH_HR_ENABLED | LIS3DH_BDU_ENABLED);	//BDU enabled, High resolution enabled
+	AccWrite(LIS3DH_REG_CTRL4, LIS3DH_HR_ENABLED | LIS3DH_BDU_ENABLED | LIS3DH_4G_SCALE);	//BDU enabled, High resolution enabled
 }
 #ifdef ACC_SPI
 void AccInit(SPI_HandleTypeDef *UsedAccSpi)
@@ -88,45 +89,15 @@ void AccReadAllAxisData()
 	Accel.Ywibration = AllAxisData[2] | AllAxisData[3] << 8;
 	Accel.Zwibration = AllAxisData[4] | AllAxisData[5] << 8;
 }
+void CalculateMagnitude()
+{
+	float MagnitudeRaw, MagnitudeUnit;
+
+	MagnitudeRaw = sqrtf((((float)Accel.Xwibration*Accel.Xwibration) + (Accel.Ywibration*Accel.Ywibration) + (Accel.Zwibration*Accel.Zwibration)));
+	MagnitudeUnit = ((MagnitudeRaw * ACC_SCALE) / ACC_MAG_DIVIDER) * EARTH_GRAVITY_ACCELERATION;
+
+	Accel.MagnitudeToSend = MagnitudeUnit * ACC_DIV_IN_APP;
+}
 
 
-
-//Test SPI
-//	AccInit(&hspi1);
-//	uint8_t WAIvalue = 0x8f;
-//	uint8_t comand[2] = {0x20, 0x77};
-//
-//	HAL_SPI_Transmit(&hspi1, comand, 2, 10);
-//
-//	comand[0] = 0x23;
-//	comand[1] = 0x08;
-//
-//	HAL_SPI_Transmit(&hspi1, comand, 2, 10);
-//
-//	HAL_Delay(15);
-//	AccReadAllAxisData(LIS3DH_REG_OUT_X_L);
-//	HAL_SPI_Transmit(&hspi1, &WAIvalue, 1, 10);
-//	HAL_SPI_Receive(&hspi1, &WAIvalue, 1, 10);
-
-//	WAIvalue = 0xE0;
-//	HAL_SPI_Transmit(&hspi1, &WAIvalue, 1, 10);
-//	HAL_SPI_Receive(&hspi1, &WAIvalue, 1, 10);
-//
-//	WAIvalue = 0xCf;
-//	HAL_SPI_Transmit(&hspi1, &WAIvalue, 1, 10);
-//	HAL_SPI_Receive(&hspi1, &WAIvalue, 1, 10);
-//
-//	WAIvalue = 0xE0;
-//	HAL_SPI_Transmit(&hspi1, &WAIvalue, 1, 10);
-//	HAL_SPI_Receive(&hspi1, &WAIvalue, 1, 10);
-
-//Test I2C
-//uint8_t data;
-//data = 0x20;
-//HAL_I2C_Master_Transmit(&hi2c1, (0x18 << 1), &data, 1, 10);
-//HAL_I2C_Master_Receive(&hi2c1, (0x18 << 1), &data, 1, 10);
-//
-//data = 0x23;
-//HAL_I2C_Master_Transmit(&hi2c1, (0x18 << 1), &data, 1, 10);
-//HAL_I2C_Master_Receive(&hi2c1, (0x18 << 1), &data, 1, 10);
 

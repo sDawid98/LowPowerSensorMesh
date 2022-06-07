@@ -35,6 +35,7 @@
 #define ACC_I2C_ADDRESS 				0x18
 #define ACC_I2C								 //if SPI is used change this define to ,,ACC_SPI"
 
+#define LIS3DH_4G_SCALE					(1 << 4)
 #define LIS3DH_BDU_ENABLED				(1 << 7)
 #define LIS3DH_HR_ENABLED				(1 << 3)
 
@@ -42,6 +43,11 @@
 #define LIS3DH_400_Hz_DATARATE_ENABLED	(7 << 4)
 
 #define ACC_GET_MEAS_INTERVAL 			10	//unit: [ms]
+
+#define ACC_SCALE						4 	//unit: [g]
+#define ACC_MAG_DIVIDER					32768
+#define ACC_DIV_IN_APP					1000 //needs to be equal to divider in mobile application
+#define EARTH_GRAVITY_ACCELERATION		(float)9.80665
 
 typedef struct
 {
@@ -55,6 +61,8 @@ typedef struct
 	int16_t Xwibration;
 	int16_t Ywibration;
 	int16_t Zwibration;
+
+	int16_t MagnitudeToSend;
 }Accelerometer_t;
 
 extern Accelerometer_t Accel;
@@ -68,4 +76,5 @@ void AccInit(I2C_HandleTypeDef *UsedAccI2c);
 void AccReadAllAxisData();
 void AccWrite(uint8_t Register, uint8_t Data);
 void AccSendByte(uint8_t *Data, uint32_t Length);
+void CalculateMagnitude(void);
 

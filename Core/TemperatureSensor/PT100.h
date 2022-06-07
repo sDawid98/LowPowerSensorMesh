@@ -15,6 +15,8 @@
 
 #define PT100_CALIB_DONE 				1
 
+#define TEMP_SEND_TIME_INTERVAL 	1000
+
 extern uint16_t PT100AdcBuffor[PT100_ADC_BUFFOR_SIZE];
 
 typedef struct

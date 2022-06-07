@@ -99,19 +99,22 @@ void SendDataBle(void)
 	static uint32_t SendTempDatTim, SendAccDatTim;
 	static int16_t b = 2555;
 
-	if(HAL_GetTick() - SendTempDatTim > 500)
+	if(HAL_GetTick() - SendTempDatTim > TEMP_SEND_TIME_INTERVAL)
 	{
 		PT100CalculateTemperature();
+
 		NotifyCharData[0] = TempSensor.TempToSend;
 		NotifyCharData[1] = TempSensor.TempToSend >> 8;
 
 		SendTempDatTim = HAL_GetTick();
 		Custom_Temperaturedata_Send_Notification();
 	}
-	if(HAL_GetTick() - SendAccDatTim > 1000)
+	if(HAL_GetTick() - SendAccDatTim > 200)
 	{
-		NotifyCharData[2] = b;
-		NotifyCharData[3] = b >> 8;
+		CalculateMagnitude();
+
+		NotifyCharData[2] = Accel.MagnitudeToSend;
+		NotifyCharData[3] = Accel.MagnitudeToSend >> 8;
 
 		SendAccDatTim = HAL_GetTick();
 		Custom_Wibrationdata_Send_Notification();
