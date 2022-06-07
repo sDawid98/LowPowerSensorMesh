@@ -28,7 +28,7 @@
 
 /* Private typedef -----------------------------------------------------------*/
 typedef struct{
-  uint16_t  CustomTest_SvcHdle;                    /**< test_SVC handle */
+  uint16_t  CustomLpsmdataHdle;                    /**< LPSMdata handle */
   uint16_t  CustomTemperaturedataHdle;                  /**< TemperatureData handle */
   uint16_t  CustomWibrationdataHdle;                  /**< WibrationData handle */
 }CustomContext_t;
@@ -105,7 +105,7 @@ do {\
  D973F2E1-B19E-11E2-9E96-0800200C9A66: Characteristic_1 128bits UUID
  D973F2E2-B19E-11E2-9E96-0800200C9A66: Characteristic_2 128bits UUID
  */
-#define COPY_TEST_SVC_UUID(uuid_struct)          COPY_UUID_128(uuid_struct,0x00,0x00,0x00,0x01,0xcc,0x7a,0x48,0x2a,0x98,0x4a,0x7f,0x2e,0xd5,0xb3,0xe5,0x8f)
+#define COPY_LPSMDATA_UUID(uuid_struct)          COPY_UUID_128(uuid_struct,0x00,0x00,0x00,0x01,0xcc,0x7a,0x48,0x2a,0x98,0x4a,0x7f,0x2e,0xd5,0xb3,0xe5,0x8f)
 #define COPY_TEMPERATUREDATA_UUID(uuid_struct)    COPY_UUID_128(uuid_struct,0x00,0x00,0x21,0x01,0x8e,0x22,0x45,0x41,0x9d,0x4c,0x21,0xed,0xae,0x82,0xed,0x19)
 #define COPY_WIBRATIONDATA_UUID(uuid_struct)    COPY_UUID_128(uuid_struct,0x00,0x00,0x21,0x02,0x8e,0x22,0x45,0x41,0x9d,0x4c,0x21,0xed,0xae,0x82,0xed,0x19)
 
@@ -330,10 +330,10 @@ void SVCCTL_InitCustomSvc(void)
   SVCCTL_RegisterSvcHandler(Custom_STM_Event_Handler);
 
   /*
-   *          test_SVC
+   *          LPSMdata
    *
    * Max_Attribute_Records = 1 + 2*2 + 1*no_of_char_with_notify_or_indicate_property + 1*no_of_char_with_broadcast_property
-   * service_max_attribute_record = 1 for test_SVC +
+   * service_max_attribute_record = 1 for LPSMdata +
    *                                2 for TemperatureData +
    *                                2 for WibrationData +
    *                                1 for TemperatureData configuration descriptor +
@@ -341,18 +341,18 @@ void SVCCTL_InitCustomSvc(void)
    *                              = 7
    */
 
-  COPY_TEST_SVC_UUID(uuid.Char_UUID_128);
+  COPY_LPSMDATA_UUID(uuid.Char_UUID_128);
   aci_gatt_add_service(UUID_TYPE_128,
                        (Service_UUID_t *) &uuid,
                        PRIMARY_SERVICE,
                        7,
-                       &(CustomContext.CustomTest_SvcHdle));
+                       &(CustomContext.CustomLpsmdataHdle));
 
   /**
    *  TemperatureData
    */
   COPY_TEMPERATUREDATA_UUID(uuid.Char_UUID_128);
-  aci_gatt_add_char(CustomContext.CustomTest_SvcHdle,
+  aci_gatt_add_char(CustomContext.CustomLpsmdataHdle,
                     UUID_TYPE_128, &uuid,
                     SizeTemperaturedata,
                     CHAR_PROP_READ | CHAR_PROP_NOTIFY,
@@ -365,7 +365,7 @@ void SVCCTL_InitCustomSvc(void)
    *  WibrationData
    */
   COPY_WIBRATIONDATA_UUID(uuid.Char_UUID_128);
-  aci_gatt_add_char(CustomContext.CustomTest_SvcHdle,
+  aci_gatt_add_char(CustomContext.CustomLpsmdataHdle,
                     UUID_TYPE_128, &uuid,
                     SizeWibrationdata,
                     CHAR_PROP_READ | CHAR_PROP_NOTIFY,
@@ -399,7 +399,7 @@ tBleStatus Custom_STM_App_Update_Char(Custom_STM_Char_Opcode_t CharOpcode, uint8
   {
 
     case CUSTOM_STM_TEMPERATUREDATA:
-      result = aci_gatt_update_char_value(CustomContext.CustomTest_SvcHdle,
+      result = aci_gatt_update_char_value(CustomContext.CustomLpsmdataHdle,
                                           CustomContext.CustomTemperaturedataHdle,
                                           0, /* charValOffset */
                                           SizeTemperaturedata, /* charValueLen */
@@ -410,7 +410,7 @@ tBleStatus Custom_STM_App_Update_Char(Custom_STM_Char_Opcode_t CharOpcode, uint8
       break;
 
     case CUSTOM_STM_WIBRATIONDATA:
-      result = aci_gatt_update_char_value(CustomContext.CustomTest_SvcHdle,
+      result = aci_gatt_update_char_value(CustomContext.CustomLpsmdataHdle,
                                           CustomContext.CustomWibrationdataHdle,
                                           0, /* charValOffset */
                                           SizeWibrationdata, /* charValueLen */

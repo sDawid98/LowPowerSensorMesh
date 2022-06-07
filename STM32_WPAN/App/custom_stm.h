@@ -34,7 +34,7 @@ extern "C" {
 /* Exported types ------------------------------------------------------------*/
 typedef enum
 {
-  /* test_SVC */
+  /* LPSMdata */
   CUSTOM_STM_TEMPERATUREDATA,
   CUSTOM_STM_WIBRATIONDATA,
 } Custom_STM_Char_Opcode_t;
