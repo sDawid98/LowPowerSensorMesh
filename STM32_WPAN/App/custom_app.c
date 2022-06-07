@@ -108,7 +108,7 @@ void SendDataBle(void)
 		SendTempDatTim = HAL_GetTick();
 		Custom_Temperaturedata_Send_Notification();
 	}
-	if(HAL_GetTick() - SendAccDatTim > 100)
+	if(HAL_GetTick() - SendAccDatTim > ACC_GET_MEAS_INTERVAL)
 	{
 		CalculateMagnitude();
 

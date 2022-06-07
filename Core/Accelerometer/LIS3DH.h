@@ -42,7 +42,7 @@
 #define LIS3DH_ALL_AXIS_ENABLED			(7 << 0)
 #define LIS3DH_400_Hz_DATARATE_ENABLED	(7 << 4)
 
-#define ACC_GET_MEAS_INTERVAL 			10	//unit: [ms]
+#define ACC_GET_MEAS_INTERVAL 			100	//unit: [ms]
 
 #define ACC_SCALE						4 	//unit: [g]
 #define ACC_MAG_DIVIDER					32768
