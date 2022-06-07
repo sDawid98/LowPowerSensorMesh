@@ -14,11 +14,13 @@ PT100_t TempSensor;
 
 void CalculateCoeffA(void)
 {
-	TempSensor.CoeffA = (PT100_CALIB_TEMP_100_DEGREES / (TempSensor.Adc100 - TempSensor.Adc0));
+	TempSensor.Adc100 = 1872;
+	TempSensor.Adc0 = 3072;
+	TempSensor.CoeffA = (PT100_CALIB_TEMP_100_DEGREES / ((float)TempSensor.Adc100 - TempSensor.Adc0));
 }
 void CalculateCoeffB(void)
 {
-	TempSensor.CoeffB = -(TempSensor.CoeffA * TempSensor.Adc0);
+	TempSensor.CoeffB = -TempSensor.CoeffA*TempSensor.Adc0;
 }
 void GetAverageAdcMeas(void)
 {
@@ -63,7 +65,6 @@ void ReadCeoffFromFlashMem(void)
  */
 void PT100CalibRoutine(void)
 {
-
 	while(HAL_GPIO_ReadPin(B1_GPIO_Port, B1_Pin)); //wait till user pushes the button when PT100 sensor is in 0 Celsius degrees
 
 	HAL_GPIO_WritePin(LD1_GPIO_Port, LD1_Pin, GPIO_PIN_SET); //turn on LED to give feedback button was pressed
@@ -91,8 +92,9 @@ void PT100Init(void)
 	else
 		ReadCeoffFromFlashMem();
 }
-void CalculateTemperature(void)
+void PT100CalculateTemperature(void)
 {
 	TempSensor.Temperature = (TempSensor.CoeffA*TempSensor.AdcAverage) + TempSensor.CoeffB;
+	TempSensor.TempToSend = TempSensor.Temperature * 100;
 }
 

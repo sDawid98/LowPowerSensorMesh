@@ -55,8 +55,6 @@ typedef struct
 	int16_t Xwibration;
 	int16_t Ywibration;
 	int16_t Zwibration;
-
-	uint32_t AccDataGetTime;
 }Accelerometer_t;
 
 extern Accelerometer_t Accel;

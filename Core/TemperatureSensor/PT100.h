@@ -8,8 +8,8 @@
 #ifndef TEMPERATURESENSOR_PT100_H_
 #define TEMPERATURESENSOR_PT100_H_
 
-#define PT100_ADC_BUFFOR_SIZE 			32
-#define PT100_ADC_BUFF_DIVIDER 			5 //should be always equal x in 2^x = PT100_ADC_BUFFOR_SIZE
+#define PT100_ADC_BUFFOR_SIZE 			256
+#define PT100_ADC_BUFF_DIVIDER 			8 //should be always equal x in 2^x = PT100_ADC_BUFFOR_SIZE
 #define PT100_CALIB_TEMP_100_DEGREES 	100
 #define PT100_CALIB_TEMP_0_DEGREES		0
 
@@ -26,6 +26,7 @@ typedef struct
 
 	uint16_t AdcAverage;
 	float Temperature;
+	int16_t TempToSend;
 }PT100_t;
 
 extern PT100_t TempSensor;
@@ -33,7 +34,7 @@ extern PT100_t TempSensor;
 void CalculateCeoffA(void);
 void CalculateCeoffB(void);
 void GetAverageAdcMeas(void);
-void CalculateTemperature(void);
+void PT100CalculateTemperature(void);
 void PT100CalibRoutine(void);
 
 void PT100Init(void);
