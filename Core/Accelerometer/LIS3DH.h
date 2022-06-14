@@ -49,6 +49,7 @@
 #define ACC_DIV_IN_APP					1000 //needs to be equal to divider in mobile application
 #define EARTH_GRAVITY_ACCELERATION		(float)9.80665
 
+
 typedef struct
 {
 #ifdef ACC_SPI

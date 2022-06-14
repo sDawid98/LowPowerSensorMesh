@@ -31,7 +31,7 @@ void GetAverageAdcMeas(void)
 
 	TempSensor.AdcAverage = SumOfAdcBuffor >> PT100_ADC_BUFF_DIVIDER;
 }
-void SaveCeoffToFlashMem(void)
+void SaveCoeffToFlashMem(void)
 {
 	float CoeffToSave[2];
 	uint32_t CalibDoneFlag = PT100_CALIB_DONE;
@@ -68,7 +68,7 @@ void PT100CalibRoutine(void)
 	HAL_GPIO_WritePin(LD1_GPIO_Port, LD1_Pin, GPIO_PIN_SET); //turn on LED to give feedback button was pressed
 	TempSensor.Adc0 = TempSensor.AdcAverage;
 
-	while(HAL_GPIO_ReadPin(B2_GPIO_Port, B2_Pin))	//wait till user pushes the button when PT100 sensor is in 0 Celsius degrees
+	while(HAL_GPIO_ReadPin(B2_GPIO_Port, B2_Pin))	//wait till user pushes the button when PT100 sensor is in 100 Celsius degrees
 
 		HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_SET); //turn on LED to give feedback button was pressed
 	TempSensor.Adc100 = TempSensor.AdcAverage;
@@ -76,8 +76,7 @@ void PT100CalibRoutine(void)
 	CalculateCoeffA();
 	CalculateCoeffB();
 
-	SaveCeoffToFlashMem();
-
+	SaveCoeffToFlashMem();
 }
 void PT100Init(void)
 {
